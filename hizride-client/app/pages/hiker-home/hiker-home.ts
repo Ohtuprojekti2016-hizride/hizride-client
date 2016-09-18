@@ -1,8 +1,19 @@
-import {Component} from "@angular/core";
+import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
 
+/*
+  Generated class for the HikerHomePage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+*/
 @Component({
-  template: "Hitchhiker home"
+  templateUrl: 'build/pages/hiker-home/hiker-home.html',
 })
-export class HikerHome {
+export class HikerHomePage {
+
+  constructor(private navCtrl: NavController) {
+
+  }
 
 }

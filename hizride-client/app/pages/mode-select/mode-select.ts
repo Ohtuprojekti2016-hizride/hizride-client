@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController} from "ionic-angular";
-import {DriverHome} from "../driver-home/driver-home";
-import {HikerHome} from "../hiker-home/hiker-home";
+import {DriverHomePage} from "../driver-home/driver-home";
+import {HikerHomePage} from "../hiker-home/hiker-home";
+import {TabsPage} from "../tabs/tabs";
 
 @Component({
   templateUrl: 'build/pages/mode-select/mode-select.html'
@@ -12,10 +13,12 @@ export class ModeSelectPage {
 
   chooseDriver() {
     //this.navCtrl.push(DriverHome);
-    this.navCtrl.setRoot(DriverHome);
+    //this.navCtrl.setRoot(DriverHomePage);
+    this.navCtrl.setRoot(TabsPage, {rootPage:"driver-home"})
   }
 
   chooseHiker(){
-    this.navCtrl.setRoot(HikerHome);
+    //this.navCtrl.setRoot(HikerHomePage);
+    this.navCtrl.setRoot(TabsPage, {rootPage:"hiker-home"})
   }
 }
