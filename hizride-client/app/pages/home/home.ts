@@ -4,6 +4,8 @@ import { CordovaOauth, Facebook } from "ng2-cordova-oauth/core";
 import {AboutPage} from '../about/about';
 import {ContactPage} from '../contact/contact';
 import {ModeSelectPage} from '../mode-select/mode-select';
+
+declare const facebookConnectPlugin: any;
  
 @Component({
     templateUrl: 'build/pages/home/home.html'
@@ -25,12 +27,27 @@ export class HomePage {
         this.platform.ready().then(() => {
             this.oauth.logInVia(this.provider).then((success) => {
                 this.navCtrl.push(ModeSelectPage);
-                alert("jee jäbä on inesä");
+
+                
+                localStorage.setItem("token", (success['access_token']));
+
+
             }, (error) => {
                 console.log(JSON.stringify(error));
             });
         });
     }
+
+    public login2() {
+         facebookConnectPlugin.login(['email'], function(response) {
+            alert('Logged in');
+            alert(JSON.stringify(response.authResponse));
+        }, function(error){
+            alert(error);
+        })
+    }
+
+
 
 
 
