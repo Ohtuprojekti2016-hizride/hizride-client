@@ -34,4 +34,8 @@
     <plugin name="cordova-plugin-statusbar" spec="~2.1.3" />
     <plugin name="cordova-plugin-whitelist" spec="~1.2.2" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
+    <plugin name="cordova-plugin-facebook4" spec="~1.7.3">
+        <variable name="APP_NAME" value="643028122527227" />
+        <variable name="APP_ID" value="643028122527227" />
+    </plugin>
 </widget>

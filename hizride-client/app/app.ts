@@ -3,6 +3,7 @@ import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
 import {ModeSelectPage} from "./pages/mode-select/mode-select";
+import {HomePage} from "./pages/home/home";
 
 
 @Component({
@@ -14,7 +15,8 @@ export class MyApp {
 
   constructor(private platform: Platform) {
     //this.rootPage = TabsPage;
-    this.rootPage = ModeSelectPage;
+    //this.rootPage = ModeSelectPage;
+    this.rootPage = HomePage;
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
