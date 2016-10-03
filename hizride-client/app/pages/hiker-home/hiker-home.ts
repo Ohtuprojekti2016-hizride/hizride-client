@@ -140,7 +140,7 @@ ngOnInit(){
     var service = new google.maps.places.PlacesService(this.map);
     service.search(request, callback);
   });
-//shduifh
+//shduifhiodfo
   function callback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
