@@ -110,6 +110,7 @@ addInfoWindow(marker, content){
   });
 
 }
+
 ngOnInit(){
 
   // get the two fields
@@ -131,46 +132,33 @@ ngOnInit(){
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
       let place = autocomplete.getPlace();
       let geometry = place.geometry;
+    var request = {
+      location: Geolocation.getCurrentPosition(),
+      radius: 2500,
+      types: ['train_station','bus_station','subway_station','transit_station']
+    };
+    var service = new google.maps.places.PlacesService(this.map);
+    service.search(request, callback);
+  });
 
-    let map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -33.8688, lng: 151.2195},
-      zoom: 13,
-      mapTypeId: 'roadmap'
+  function callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        createMarker(results[i]);
+      }
+    }
+  }
+
+  function createMarker(place) {
+
+    var placeLoc = place.geometry.location;
+    var marker = new google.maps.Marker({
+      map: this.map,
+      position: place.geometry.location
     });
 
-    var bounds = new google.maps.LatLngBounds();
+};
 
-    if ((geometry) !== undefined) {
-
-         console.log(place.name);
-
-         console.log(geometry.location.lng());
-
-         console.log(geometry.location.lat());
-        var icon = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
-
-
-        let marker = new google.maps.Marker({
-          map: map,
-          icon: icon,
-          title: place.name,
-          animation: google.maps.Animation.DROP,
-          position: place.geometry.location,
-        });
-        if (place.geometry.viewport) {
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
-
-        map.fitBounds(bounds);
-       }});
 
 
 }
