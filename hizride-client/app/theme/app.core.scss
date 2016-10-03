@@ -13,5 +13,11 @@
 
 @import "../pages/home/home";
 
+
 @import "../pages/driver-home/driver-home.scss";
 @import "../pages/hiker-home/hiker-home.scss";
+
+
+.login-background {
+  background: url('../../img/background.jpg');
+}

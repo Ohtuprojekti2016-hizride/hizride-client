@@ -1,12 +1,21 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar dark>
     <ion-title>
-      Driver or hitchhiker?
+      Select Your Role
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content text-center class="vertical-center">
-  <button large class="vertical-padding" (click)="chooseDriver()">Driver</button>
-  <button large class="vertical-padding" (click)="chooseHiker()">Hitchhiker</button>
+<ion-content text-center class="login-background">
+	<br>
+	<br>
+  	<button (click)="chooseDriver()" large round color="light" ion-button icon-left>
+  		<ion-icon name="ios-car-outline"></ion-icon>
+  		Driver
+ 	 </button>
+
+  	<button (click)="chooseHiker()" large round color="light" ion-button icon-left>
+  		<ion-icon name="ios-thumbs-up-outline"></ion-icon>
+  		Hitchhiker
+  	</button>
 </ion-content>

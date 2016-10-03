@@ -1,11 +1,45 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>Oauth Project</ion-title>
-    </ion-navbar>
+<ion-nav-bar>
+</ion-nav-bar>
+<ion-nav-view>
+  <ion-view>
+  <br>
+    <ion-nav-title>
+      <img src="img/logo.png" class="center">
+    </ion-nav-title>
+    <ion-content>
+      Some super content here!
+    </ion-content>
+  </ion-view>
+</ion-nav-view>
 </ion-header>
 
-<ion-content padding>
-    <button (click)="login()">Facebook Login</button>
-    <button (click)="login2()">Facebook Login 2</button>
-    <button (click)="skipLogin()">Skip Login</button>
+
+
+<ion-content class="login-background">
+
+<ion-card>
+    <img src="img/travel.jpg"/>
+    <div class="card-title"></div>
+   <div class="card-subtitle"></div>
+  </ion-card>
+
+
+<!facebook login>
+  <button (click)="login()" color="light" outline ion-button block icon-left>
+  		<ion-icon name="logo-facebook"></ion-icon>
+  			Facebook Login
+  </button>
+
+<!linkedIn login>
+    <button (click)="login2()" color="light" outline ion-button block icon-left>
+  		<ion-icon name="logo-linkedin"></ion-icon>
+  			LinkedIn Login
+  </button>
+  <button (click)="skipLogin()">Skip Login</button>
+
+
+
+
 </ion-content>
+
