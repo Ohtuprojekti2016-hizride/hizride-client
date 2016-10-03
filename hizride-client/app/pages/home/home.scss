@@ -2,6 +2,40 @@
 
 }
 
+
+.card-background-page {
+
+  ion-card {
+    position: relative;
+    text-align: center;
+    width: 100%
+  }
+
+  .card-title {
+    position: absolute;
+    top: 40%;
+    font-size: 2.0em;
+    width: 100%;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .card-subtitle {
+    font-size: 1.0em;
+    position: absolute;
+    top: 52%;
+    width: 100%;
+    color: #fff;
+  }
+
+}
+
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .scroll {
     height: 100%;
 }
