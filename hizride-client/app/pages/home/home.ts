@@ -6,15 +6,15 @@ import {ContactPage} from '../contact/contact';
 import {ModeSelectPage} from '../mode-select/mode-select';
 
 declare const facebookConnectPlugin: any;
- 
+
 @Component({
     templateUrl: 'build/pages/home/home.html'
 })
 export class HomePage {
- 
+
     public oauth: CordovaOauth;
     private provider: Facebook;
- 
+
     public constructor(public navCtrl: NavController, private platform: Platform) {
         this.oauth = new CordovaOauth();
         this.provider = new Facebook({
@@ -22,13 +22,13 @@ export class HomePage {
             appScope: ["email"]
         });
     }
- 
+
     public login() {
         this.platform.ready().then(() => {
             this.oauth.logInVia(this.provider).then((success) => {
                 this.navCtrl.push(ModeSelectPage);
 
-                
+
                 localStorage.setItem("token", (success['access_token']));
 
 
@@ -47,9 +47,12 @@ export class HomePage {
         })
     }
 
+    public skipLogin(){
+      this.navCtrl.push(ModeSelectPage);
+    }
 
 
 
 
- 
+
 }

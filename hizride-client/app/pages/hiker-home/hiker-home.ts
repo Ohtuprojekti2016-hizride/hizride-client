@@ -11,11 +11,16 @@ declare var google;
 })
 export class HikerHomePage implements OnInit{
 
+
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
+  position;
+  curLoc;
+
   constructor(public navCtrl: NavController) {
  	this.toValue = "";
+    this.loadMap();
   }
 
   ionViewLoaded(){
@@ -24,8 +29,9 @@ export class HikerHomePage implements OnInit{
 
   loadMap(){
 
-    Geolocation.getCurrentPosition().then((position) => {
 
+    Geolocation.getCurrentPosition().then((position) => {
+      this.position = position;
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
       let mapOptions = {
@@ -36,12 +42,49 @@ export class HikerHomePage implements OnInit{
 
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-    }, (err) => {
+        }, (err) => {
       console.log(err);
     });
+    console.log("track position");
+    this.trackPosition();
 
   }
+  trackPosition(){
+  if(navigator.geolocation){
 
+    let watch = Geolocation.watchPosition().subscribe(pos => {
+      console.log('lat: ' + pos.coords.latitude + ', lon: ' + pos.coords.longitude);
+      var lat = pos.coords.latitude;
+      var long = pos.coords.longitude;
+      var currentLocation = new google.maps.LatLng(lat, long);
+      this.curLoc = currentLocation;
+      this.setTrackingMarker(currentLocation);
+
+    });
+
+
+      console.log("assigning your new position");
+
+
+
+  }else{
+    document.getElementById('map-canvas').innerHTML = "Geolocation is not Supported for this browser/OS.";
+  }
+}
+setTrackingMarker(currentLocation){
+  let currentPosMarker = new google.maps.Marker({
+    map: this.map,
+    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+      new google.maps.Size(22,22),
+      new google.maps.Point(0,18),
+      new google.maps.Point(11,11)),
+    shadow: null,
+    zIndex: 999,
+    animation: google.maps.Animation.DROP,
+  });
+
+  currentPosMarker.setPosition(currentLocation);
+}
 addMarker(){
 
   let marker = new google.maps.Marker({
@@ -84,18 +127,17 @@ ngOnInit(){
   // we need to save a reference to this as we lose it in the callbacks
   let self = this;
 
-  // add the first listener
-
-
-  // add the second listener
+    this.loadMap();
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
       let place = autocomplete.getPlace();
       let geometry = place.geometry;
-    var map = new google.maps.Map(document.getElementById('map'), {
+
+    let map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: -33.8688, lng: 151.2195},
       zoom: 13,
       mapTypeId: 'roadmap'
     });
+
     var bounds = new google.maps.LatLngBounds();
 
     if ((geometry) !== undefined) {
@@ -126,12 +168,9 @@ ngOnInit(){
         } else {
           bounds.extend(place.geometry.location);
         }
+
         map.fitBounds(bounds);
-
-
-
        }});
-
 
 
 }
