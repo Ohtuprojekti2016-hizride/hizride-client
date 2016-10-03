@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
+import { AlertController } from 'ionic-angular';
 
 declare var google;
 
@@ -14,7 +15,7 @@ export class DriverHomePage implements OnInit{
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
  	this.toValue = "";
   }
 
@@ -135,6 +136,31 @@ ngOnInit(){
 
 
 }
+
+
+
+showConfirm() {
+    let confirm = this.alertCtrl.create({
+      title: 'Liftari lähellä!',
+      message: 'Haluatko ottaa tämän henkilön kyytiin?',
+      buttons: [
+        {
+          text: 'Ei',
+          handler: () => {
+            console.log('"Ei" painettu');
+          }
+        },
+        {
+          text: 'Kyllä',
+          handler: () => {
+            console.log('"Kyllä" painettu');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
 
 
 
