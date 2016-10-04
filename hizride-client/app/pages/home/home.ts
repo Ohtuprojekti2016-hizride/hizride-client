@@ -17,14 +17,20 @@ export class HomePage {
     }
 
     public login() {
-    this.platform.ready().then(() => {
-        this.auth.login('facebook').then((success) => {
-        console.log(this.user.social.facebook.data.full_name);
+
+    if (this.auth.isAuthenticated()) {
         this.navCtrl.push(ModeSelectPage);
-        }, (error) => {
-        console.log("error: " + error );
+    } else {
+
+        this.platform.ready().then(() => {
+            this.auth.login('facebook').then((success) => {
+            console.log(this.user.social.facebook.data.full_name);
+            this.navCtrl.push(ModeSelectPage);
+            }, (error) => {
+            console.log("error: " + error );
+            });
         });
-    });
+    }
   }
 
   public login2() {
