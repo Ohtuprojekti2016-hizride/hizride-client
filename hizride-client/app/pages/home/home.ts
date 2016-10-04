@@ -34,15 +34,28 @@ export class HomePage {
   }
 
   public login2() {
-    this.platform.ready().then(() => {
-        this.auth.login('linkedin').then((success) => {
-        console.log(this.user.social.linkedin.uid);
-        this.navCtrl.push(ModeSelectPage);
-        }, (error) => {
-        console.log("error: " + error );
+
+        this.platform.ready().then(() => {
+            this.auth.login('linkedin').then((success) => {
+            console.log(this.user.social.linkedin.uid);
+            this.navCtrl.push(ModeSelectPage);
+            }, (error) => {
+            console.log("error: " + error );
+            });
         });
-    });
-  }
+    }
+
+  public login3() {
+
+        this.platform.ready().then(() => {
+            this.auth.login('github').then((success) => {
+            console.log(this.user.social.github.uid);
+            this.navCtrl.push(ModeSelectPage);
+            }, (error) => {
+            console.log("error: " + error );
+            });
+        });
+    }
 
   public skipLogin(){
     this.navCtrl.push(ModeSelectPage);
