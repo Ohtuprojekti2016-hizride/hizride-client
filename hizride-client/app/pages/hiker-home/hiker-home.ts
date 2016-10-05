@@ -61,12 +61,13 @@ export class HikerHomePage implements OnInit{
       var service = new google.maps.places.PlacesService(self.map);
 	  
 	  var request = {
+	  query: "bus station",
       location: latLng,
       radius: 2500,
-      types: ['restaurant']
+      //types: ['restaurant']
       };
 	  
- 	  service.nearbySearch(request, callback);
+ 	  service.textSearch(request, callback);
   });
 
   function callback(results, status) {
