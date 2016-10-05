@@ -11,7 +11,6 @@ declare var google;
 })
 export class HikerHomePage implements OnInit{
 
-
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
@@ -20,7 +19,6 @@ export class HikerHomePage implements OnInit{
 
   constructor(public navCtrl: NavController) {
  	this.toValue = "";
-    this.loadMap();
   }
 
   ionViewLoaded(){
@@ -29,9 +27,8 @@ export class HikerHomePage implements OnInit{
 
   loadMap(){
 
-
     Geolocation.getCurrentPosition().then((position) => {
-      this.position = position;
+		
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
       let mapOptions = {
@@ -45,6 +42,7 @@ export class HikerHomePage implements OnInit{
         }, (err) => {
       console.log(err);
     });
+	
     console.log("track position");
     this.trackPosition();
 
@@ -127,8 +125,8 @@ ngOnInit(){
 
   // we need to save a reference to this as we lose it in the callbacks
   let self = this;
-
-    this.loadMap();
+  this.loadMap();
+  
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
       let place = autocomplete.getPlace();
       let geometry = place.geometry;

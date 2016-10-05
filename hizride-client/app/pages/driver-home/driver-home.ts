@@ -34,13 +34,73 @@ export class DriverHomePage implements OnInit{
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
 
+	  // create the map itself
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+	  
+	  // get the two fields
+	  let input_to = (<HTMLInputElement>document.getElementById("journey_to"));
 
-    }, (err) => {
-      console.log(err);
-    });
+	  // set the autocomplete options
+	  let autocompleteOptions = {
+		types: [],
+		componentRestrictions: {country: "fi"}
+	  };
 
-  }
+	  // create the two autocompletes on the from and to fields
+	  let autocomplete = new google.maps.places.Autocomplete(input_to, autocompleteOptions);
+
+	  // we need to save a reference to this as we lose it in the callbacks
+	  let self = this;
+
+	  // add the first listener
+	  // TODO
+
+	  // add the second listener
+	  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		  let place = autocomplete.getPlace();
+		  let geometry = place.geometry;
+		  self.map.setCenter({ lat: -33.8688, lng: 151.2195 })
+		  
+		var bounds = new google.maps.LatLngBounds();
+
+		if ((geometry) !== undefined) {
+
+		  console.log(place.name);
+		  console.log(geometry.location.lng());
+		  console.log(geometry.location.lat());
+		
+		  var icon = {
+			  url: place.icon,
+			  size: new google.maps.Size(71, 71),
+			  origin: new google.maps.Point(0, 0),
+			  anchor: new google.maps.Point(17, 34),
+			  scaledSize: new google.maps.Size(25, 25)
+		  };
+
+
+		  let marker = new google.maps.Marker({
+			  map: self.map,
+			  icon: icon,
+			  title: place.name,
+			  animation: google.maps.Animation.DROP,
+			  position: place.geometry.location,
+		  });
+		
+		  if (place.geometry.viewport) {
+			  bounds.union(place.geometry.viewport);
+			  } else {
+			  bounds.extend(place.geometry.location);
+			  }
+			  self.map.fitBounds(bounds);
+		   }
+		   
+		});
+
+		}, (err) => {
+		  console.log(err);
+		});
+
+	  }
 
 addMarker(){
 
@@ -68,69 +128,6 @@ addInfoWindow(marker, content){
 
 }
 ngOnInit(){
-
-  // get the two fields
-  let input_to = (<HTMLInputElement>document.getElementById("journey_to"));
-
-// set the options
-  let options = {
-    types: [],
-    componentRestrictions: {country: "fi"}
-  };
-
-  // create the two autocompletes on the from and to fields
-  let autocomplete = new google.maps.places.Autocomplete(input_to, options);
-
-  // we need to save a reference to this as we lose it in the callbacks
-  let self = this;
-
-  // add the first listener
-
-
-  // add the second listener
-  google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      let place = autocomplete.getPlace();
-      let geometry = place.geometry;
-    var map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -33.8688, lng: 151.2195},
-      zoom: 13,
-      mapTypeId: 'roadmap'
-    });
-    var bounds = new google.maps.LatLngBounds();
-
-    if ((geometry) !== undefined) {
-
-         console.log(place.name);
-
-         console.log(geometry.location.lng());
-
-         console.log(geometry.location.lat());
-        var icon = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
-
-
-        let marker = new google.maps.Marker({
-          map: map,
-          icon: icon,
-          title: place.name,
-          animation: google.maps.Animation.DROP,
-          position: place.geometry.location,
-        });
-        if (place.geometry.viewport) {
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
-        map.fitBounds(bounds);
-
-
-
-       }});
 
 
 
