@@ -9,6 +9,7 @@ declare var google;
 @Component({
   templateUrl: 'build/pages/driver-home/driver-home.html'
 })
+
 export class DriverHomePage implements OnInit{
 
   @ViewChild('map') mapElement: ElementRef;
@@ -96,9 +97,9 @@ export class DriverHomePage implements OnInit{
 		   
 		});
 
-		}, (err) => {
-		  console.log(err);
-		});
+	}, (err) => {
+	  console.log(err);
+	});
 
 	  }
 
@@ -127,9 +128,8 @@ addInfoWindow(marker, content){
   });
 
 }
+
 ngOnInit(){
-
-
 
 }
 
