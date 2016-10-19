@@ -18,9 +18,6 @@ export class HomePage {
 
     public login() {
 
-    if (this.auth.isAuthenticated()) {
-        this.navCtrl.push(ModeSelectPage);
-    } else {
 
         this.platform.ready().then(() => {
             this.auth.login('facebook').then((success) => {
@@ -31,7 +28,6 @@ export class HomePage {
             });
         });
     }
-  }
 
   public login2() {
 
