@@ -18,8 +18,9 @@ export class DriverHomePage implements OnInit{
   map: any;
   toValue:string;
 
-  constructor(public navCtrl: NavController, private platform: Platform, public alertCtrl: AlertController, public user: User) {
+  constructor(public navCtrl: NavController, public platform: Platform, public alertCtrl: AlertController, public user: User) {
  	this.toValue = "";
+  this.platform = platform;
   }
 
   ionViewLoaded(){
@@ -27,11 +28,17 @@ export class DriverHomePage implements OnInit{
   }
 
   loadMap(){
+  console.log("0");
+    this.platform.ready().then(() => {
+    console.log("1" + this.platform);
     var directionsService = new google.maps.DirectionsService();
+    console.log("2");
+
     var directionsDisplay = new google.maps.DirectionsRenderer();
 
-    Geolocation.getCurrentPosition().then((position) => {
+    Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
+console.log("3");
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
       let mapOptions = {
@@ -121,7 +128,7 @@ export class DriverHomePage implements OnInit{
 	}, (err) => {
 	  console.log(err);
 	});
-
+  });
 	  }
 
 addMarker(){
