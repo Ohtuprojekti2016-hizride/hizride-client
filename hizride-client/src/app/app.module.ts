@@ -10,6 +10,8 @@ import {HikerHomePage} from "../pages/hiker-home/hiker-home";
 import {ModeSelectPage} from "../pages/mode-select/mode-select";
 
 import {CloudSettings, CloudModule} from '@ionic/cloud-angular';
+/*import { Ng2Cable, Broadcaster } from 'ng2-cable/js/index';*/
+import {ActionCableService} from "../providers/action-cable";
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -43,6 +45,6 @@ const cloudSettings: CloudSettings = {
     HikerHomePage,
     ModeSelectPage
   ],
-  providers: []
+  providers: [ActionCableService]
 })
 export class AppModule {}

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Auth, User } from '@ionic/cloud-angular';
 import { NavController, Platform } from 'ionic-angular';
 import { ModeSelectPage } from '../mode-select/mode-select';
+import {ActionCableService} from "../../providers/action-cable";
 
 
 @Component({
@@ -10,7 +11,11 @@ import { ModeSelectPage } from '../mode-select/mode-select';
 export class HomePage {
 
 
-    public constructor(public navCtrl: NavController, public platform: Platform, public user: User, public auth: Auth) {
+    public constructor(public navCtrl: NavController,
+                       public platform: Platform,
+                       public user: User,
+                       public auth: Auth,
+                       public actionCable:ActionCableService) {
 
     }
 
@@ -52,6 +57,7 @@ export class HomePage {
     }
 
   public skipLogin(){
+    this.actionCable.sendMessage("Skipped login, sending message")
     this.navCtrl.push(ModeSelectPage);
   }
 
