@@ -1,5 +1,5 @@
-import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
-import {NavController, Platform} from 'ionic-angular';
+import {Component, ViewChild, ElementRef} from '@angular/core';
+import {Platform} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 
 declare var google;
@@ -10,12 +10,12 @@ declare var google;
   templateUrl: 'hiker-home.html'
 })
 
-export class HikerHomePage implements OnInit{
+export class HikerHomePage{
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
-  constructor(public navCtrl: NavController, public platform:Platform) {
+  constructor(public platform:Platform) {
  	this.toValue = "";
     this.platform = platform;
   }
@@ -36,7 +36,7 @@ export class HikerHomePage implements OnInit{
           center: latLng,
           zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
+        };
 
         // create the map itself
         this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
@@ -58,8 +58,6 @@ export class HikerHomePage implements OnInit{
 
         // add the first listener
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
-          let place = autocomplete.getPlace();
-          let geometry = place.geometry;
 
           var service = new google.maps.places.PlacesService(self.map);
 
@@ -74,8 +72,8 @@ export class HikerHomePage implements OnInit{
         });
 
         function callback(results, status) {
-          console.log("Results length: " + results.length)
-          console.log("Results[0]: " + results[0].name)
+          console.log("Results length: " + results.length);
+          console.log("Results[0]: " + results[0].name);
           if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
               createMarker(results[i]);
@@ -85,12 +83,11 @@ export class HikerHomePage implements OnInit{
 
         function createMarker(place) {
 
-          var placeLoc = place.geometry.location;
-          var marker = new google.maps.Marker({
+          new google.maps.Marker({
             map: self.map,
             position: place.geometry.location
           });
-        };
+        }
 
         // add the second listener
         /*
@@ -139,38 +136,31 @@ export class HikerHomePage implements OnInit{
         console.log(err);
       });
     });
-  } 
-	 
-addMarker(){
+  }
 
-  let marker = new google.maps.Marker({
-    map: this.map,
-    animation: google.maps.Animation.DROP,
-    position: this.map.getCenter()
-  });
+  addMarker(){
 
-  let content = "<h4>Information!</h4>";
+    let marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: this.map.getCenter()
+    });
 
-  this.addInfoWindow(marker, content);
+    let content = "<h4>Information!</h4>";
 
-}
+    this.addInfoWindow(marker, content);
 
-addInfoWindow(marker, content){
+  }
 
-  let infoWindow = new google.maps.InfoWindow({
-    content: content
-  });
+  addInfoWindow(marker, content){
 
-  google.maps.event.addListener(marker, 'click', () => {
-    infoWindow.open(this.map, marker);
-  });
+    let infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
 
-}
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
+    });
 
-ngOnInit(){
-
-}
-
-
-
+  }
 }

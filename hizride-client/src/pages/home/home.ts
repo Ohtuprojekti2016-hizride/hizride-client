@@ -23,7 +23,7 @@ export class HomePage {
 
 
         this.platform.ready().then(() => {
-            this.auth.login('facebook').then((success) => {
+            this.auth.login('facebook').then(() => {
             console.log(this.user.social.facebook.data.full_name);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
@@ -35,7 +35,7 @@ export class HomePage {
   public login2() {
 
         this.platform.ready().then(() => {
-            this.auth.login('linkedin').then((success) => {
+            this.auth.login('linkedin').then(() => {
             console.log(this.user.social.linkedin.uid);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
@@ -47,7 +47,7 @@ export class HomePage {
   public login3() {
 
         this.platform.ready().then(() => {
-            this.auth.login('github').then((success) => {
+            this.auth.login('github').then(() => {
             console.log(this.user.social.github.uid);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
@@ -57,7 +57,7 @@ export class HomePage {
     }
 
   public skipLogin(){
-    this.actionCable.sendMessage("Skipped login, sending message")
+    this.actionCable.sendMessage("Skipped login, sending message");
     this.navCtrl.push(ModeSelectPage);
   }
 
