@@ -3,6 +3,7 @@ import { Auth, User } from '@ionic/cloud-angular';
 import { NavController, Platform } from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import { AlertController } from 'ionic-angular';
+import {ActionCableService} from "../../providers/action-cable";
 
 declare var google;
 
@@ -18,7 +19,11 @@ export class DriverHomePage implements OnInit{
   map: any;
   toValue:string;
 
-  constructor(public navCtrl: NavController, public platform: Platform, public alertCtrl: AlertController, public user: User) {
+  public constructor(public navCtrl: NavController,
+              public platform: Platform,
+              public alertCtrl: AlertController,
+              public user: User,
+              public actionCable: ActionCableService) {
  	this.toValue = "";
   this.platform = platform;
   }
@@ -28,6 +33,7 @@ export class DriverHomePage implements OnInit{
   }
 
   loadMap(){
+    var self = this;
   console.log("0");
     this.platform.ready().then(() => {
     console.log("1" + this.platform);
@@ -38,7 +44,7 @@ export class DriverHomePage implements OnInit{
 
     Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
-console.log("3");
+    console.log("3");
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
       let mapOptions = {
@@ -108,6 +114,7 @@ console.log("3");
 			  bounds.extend(place.geometry.location);
 			  }
 			  */
+
       var request = {
         origin: latLng,
         destination: place.geometry.location,
@@ -116,6 +123,8 @@ console.log("3");
       directionsService.route(request, function(result, status) {
         if (status == 'OK') {
           directionsDisplay.setDirections(result);
+          self.actionCable.sendRoute("reitti");
+          console.log("dagfdfd");
         }
       });
 

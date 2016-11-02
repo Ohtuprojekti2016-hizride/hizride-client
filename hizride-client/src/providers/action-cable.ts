@@ -40,6 +40,9 @@ export class ActionCableService {
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
+      },
+      sendRoute: function(data) {
+        this.perform("set_route", {data: data})
       }
     });
 
@@ -62,4 +65,8 @@ export class ActionCableService {
     this.app.messagesChannel.sendMessage(message)
   }
 
+  sendRoute(route) {
+    /*this.broadcaster.broadcast("route", route)*/
+    this.app.messagesChannel.sendRoute(route)
+  }
 }
