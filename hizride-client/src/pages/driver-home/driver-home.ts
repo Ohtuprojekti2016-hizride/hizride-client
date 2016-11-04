@@ -5,7 +5,7 @@ import {Geolocation} from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 
 declare var google;
-
+declare var RouteBoxer:any;
 
 
 @Component({
@@ -35,7 +35,10 @@ export class DriverHomePage implements OnInit{
     console.log("2");
 
     var directionsDisplay = new google.maps.DirectionsRenderer();
+    var routeBoxer = new RouteBoxer();
+    var distance = 0.1; //km
 
+      console.log("routeboxer ready: " + routeBoxer);
     Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
 console.log("3");
@@ -116,6 +119,8 @@ console.log("3");
       directionsService.route(request, function(result, status) {
         if (status == 'OK') {
           directionsDisplay.setDirections(result);
+          var boxes = routeBoxer.box(result.routes[0].overview_path,distance);
+          self.searchBounds(boxes);
         }
       });
 
@@ -130,7 +135,13 @@ console.log("3");
 	});
   });
 	  }
-
+searchBounds(boxes){
+  console.log("searchboxes amount: " + boxes.length);
+  for(var i = 0; i< boxes.length;i++){
+    console.log("search box " + i + ": " + boxes[i]);
+  }
+  
+}
 addMarker(){
 
   let marker = new google.maps.Marker({
