@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
 import {NavController, Platform} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
+import {ActionCableService} from "../../providers/action-cable";
 
 declare var google;
 
@@ -15,22 +16,31 @@ export class HikerHomePage implements OnInit{
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
-  constructor(public navCtrl: NavController, public platform:Platform) {
+
+  constructor(public navCtrl: NavController, public platform:Platform, public actionCable: ActionCableService) {
  	this.toValue = "";
     this.platform = platform;
   }
 
-  ionViewLoaded(){
+  //ionViewLoaded(){
+  //  this.loadMap();
+  //}
+
+  ionViewDidLoad(){
     this.loadMap();
   }
 
   loadMap(){
+    console.log("0");
     this.platform.ready().then(() => {
-
+  console.log("1");
 
       Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        // current location lähetetään backendiin
+        this.actionCable.sendCurrentLocation("location");
 
         let mapOptions = {
           center: latLng,
@@ -139,8 +149,8 @@ export class HikerHomePage implements OnInit{
         console.log(err);
       });
     });
-  } 
-	 
+  }
+
 addMarker(){
 
   let marker = new google.maps.Marker({

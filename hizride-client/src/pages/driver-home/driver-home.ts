@@ -47,6 +47,9 @@ export class DriverHomePage implements OnInit{
     console.log("3");
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
+      // current location lähetetään backendiin
+      this.actionCable.sendCurrentLocation("location");
+
       let mapOptions = {
         center: latLng,
         zoom: 15,
@@ -124,7 +127,6 @@ export class DriverHomePage implements OnInit{
         if (status == 'OK') {
           directionsDisplay.setDirections(result);
           self.actionCable.sendRoute("reitti");
-          console.log("dagfdfd");
         }
       });
 
