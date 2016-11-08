@@ -73,8 +73,10 @@ export class ActionCableService {
     this.app.messagesChannel.sendRoute(route)
   }
 
-  sendCurrentLocation(location) {
-    /*this.broadcaster.broadcast("location", location)*/
-    this.app.messagesChannel.sendCurrentLocation(location)
+  sendCurrentLocation(coordinates) {
+    /*this.broadcaster.broadcast("lat", lat)*/
+
+    var data = {lat:coordinates['lat'], lng:coordinates['lng']};
+    this.app.messagesChannel.sendCurrentLocation(data)
   }
 }
