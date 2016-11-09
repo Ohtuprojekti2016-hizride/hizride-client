@@ -58,10 +58,10 @@ export class HomePage {
 
   public skipLogin(){
     this.actionCable.sendMessage("Skipped login, sending message")
+
+
     this.navCtrl.push(ModeSelectPage);
   }
-
-
 
 
 }
