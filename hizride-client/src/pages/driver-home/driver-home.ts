@@ -3,6 +3,7 @@ import { User } from '@ionic/cloud-angular';
 import { Platform } from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import { AlertController } from 'ionic-angular';
+import {ActionCableService} from "../../providers/action-cable";
 
 declare var google;
 
@@ -18,9 +19,12 @@ export class DriverHomePage {
   map: any;
   toValue:string;
 
-  constructor(public platform: Platform, public alertCtrl: AlertController, public user: User) {
- 	this.toValue = "";
-  this.platform = platform;
+  public constructor(public platform: Platform,
+                     public alertCtrl: AlertController,
+                     public user: User,
+                     public actionCable: ActionCableService) {
+    this.toValue = "";
+    this.platform = platform;
   }
 
   ionViewDidLoad(){
@@ -28,7 +32,8 @@ export class DriverHomePage {
   }
 
   loadMap(){
-  console.log("0");
+    var self = this;
+    console.log("0");
     this.platform.ready().then(() => {
     console.log("1" + this.platform);
     var directionsService = new google.maps.DirectionsService();

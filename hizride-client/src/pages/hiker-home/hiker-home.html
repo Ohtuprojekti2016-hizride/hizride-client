@@ -1,12 +1,10 @@
 <ion-header>
   <ion-toolbar>
-	 <ion-buttons end>
-      <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Lisää noutopaikka</button>
+    <ion-buttons end>
+      <button (click)="addMarker()" ion-button><ion-icon name="add"></ion-icon>Lisää noutopaikka</button>
     </ion-buttons>
-
-    
-    </ion-toolbar>
-    <input id="journey_to" name="journey_to" type="text" placeholder="Enter location"[(ngModel)]="toValue">
+  </ion-toolbar>
+  <input id="journey_to" name="journey_to" type="text" placeholder="Enter location"[(ngModel)]="toValue">
 </ion-header>
 
 <ion-content>
