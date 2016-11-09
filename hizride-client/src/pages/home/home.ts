@@ -16,7 +16,7 @@ export class HomePage {
                        public user: User,
                        public auth: Auth,
                        public actionCable:ActionCableService) {
-
+      this.platform = platform;
     }
 
     public login() {

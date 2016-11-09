@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {Platform} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
+import {ActionCableService} from "../../providers/action-cable";
 
 declare var google;
 
@@ -10,17 +11,17 @@ declare var google;
   templateUrl: 'hiker-home.html'
 })
 
-export class HikerHomePage{
+export class HikerHomePage {
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
-  constructor(public platform:Platform) {
- 	this.toValue = "";
+  constructor(public platform:Platform, public actionCable: ActionCableService) {
+    this.toValue = "";
     this.platform = platform;
   }
 
-  ionViewLoaded(){
+  ionViewDidLoad(){
     this.loadMap();
   }
 
