@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
 import {NavController} from "ionic-angular";
-import {DriverHomePage} from "../driver-home/driver-home";
-import {HikerHomePage} from "../hiker-home/hiker-home";
 import {TabsPage} from "../tabs/tabs";
 
 @Component({
