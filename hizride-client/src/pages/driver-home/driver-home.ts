@@ -1,6 +1,6 @@
-import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
-import { Auth, User } from '@ionic/cloud-angular';
-import { NavController, Platform } from 'ionic-angular';
+import {Component, ViewChild, ElementRef} from '@angular/core';
+import { User } from '@ionic/cloud-angular';
+import { Platform } from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 
@@ -12,13 +12,13 @@ declare var google;
   templateUrl: 'driver-home.html'
 })
 
-export class DriverHomePage implements OnInit{
+export class DriverHomePage {
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
 
-  constructor(public navCtrl: NavController, public platform: Platform, public alertCtrl: AlertController, public user: User) {
+  constructor(public platform: Platform, public alertCtrl: AlertController, public user: User) {
  	this.toValue = "";
   this.platform = platform;
   }
@@ -45,7 +45,7 @@ console.log("3");
         center: latLng,
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
+      };
 
 	  // create the map itself
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
@@ -75,9 +75,7 @@ console.log("3");
 	  google.maps.event.addListener(autocomplete, 'place_changed', function() {
 		  let place = autocomplete.getPlace();
 		  let geometry = place.geometry;
-		  self.map.setCenter({ lat: -33.8688, lng: 151.2195 })
-
-		var bounds = new google.maps.LatLngBounds();
+		  self.map.setCenter({ lat: -33.8688, lng: 151.2195 });
 
 		if ((geometry) !== undefined) {
 
@@ -94,7 +92,7 @@ console.log("3");
 		  };
 
 
-		  let marker = new google.maps.Marker({
+		  new google.maps.Marker({
 			  map: self.map,
 			  icon: icon,
 			  title: place.name,
@@ -102,12 +100,6 @@ console.log("3");
 			  position: place.geometry.location,
 		  });
 
-		  /*if (place.geometry.viewport) {
-			  bounds.union(place.geometry.viewport);
-			  } else {
-			  bounds.extend(place.geometry.location);
-			  }
-			  */
       var request = {
         origin: latLng,
         destination: place.geometry.location,
@@ -119,8 +111,6 @@ console.log("3");
         }
       });
 
-     // self.map.fitBounds(bounds);
-
 		   }
 
 		});
@@ -131,64 +121,56 @@ console.log("3");
   });
 	  }
 
-addMarker(){
+  addMarker(){
 
-  let marker = new google.maps.Marker({
-    map: this.map,
-    animation: google.maps.Animation.DROP,
-    position: this.map.getCenter()
-  });
-
-  let content = "<h4>Information!</h4>";
-
-  this.addInfoWindow(marker, content);
-
-}
-
-addInfoWindow(marker, content){
-
-  let infoWindow = new google.maps.InfoWindow({
-    content: content
-  });
-
-  google.maps.event.addListener(marker, 'click', () => {
-    infoWindow.open(this.map, marker);
-  });
-
-}
-
-ngOnInit(){
-
-}
-
-
-
-showConfirm() {
-	var name = this.user.social.facebook.data.full_name;
-	var pic = this.user.social.facebook.data.profile_picture;
-	console.log(pic);
-    let confirm = this.alertCtrl.create({
-      title: 'Liftari lähellä!',
-      message: 'Haluatko ottaa tämän henkilön kyytiin? ' + name + '<br><img src="' + pic + '" alt="profiilikuva">',
-      buttons: [
-        {
-          text: 'Ei',
-          handler: () => {
-            console.log('"Ei" painettu');
-          }
-        },
-        {
-          text: 'Kyllä',
-          handler: () => {
-            console.log('"Kyllä" painettu');
-          }
-        }
-      ]
+    let marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: this.map.getCenter()
     });
-    confirm.present();
+
+    let content = "<h4>Information!</h4>";
+
+    this.addInfoWindow(marker, content);
+
+  }
+
+  addInfoWindow(marker, content){
+
+    let infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
+    });
+
   }
 
 
-
+  showConfirm() {
+    var name = this.user.social.facebook.data.full_name;
+    var pic = this.user.social.facebook.data.profile_picture;
+    console.log(pic);
+      let confirm = this.alertCtrl.create({
+        title: 'Liftari lähellä!',
+        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + name + '<br><img src="' + pic + '" alt="profiilikuva">',
+        buttons: [
+          {
+            text: 'Ei',
+            handler: () => {
+              console.log('"Ei" painettu');
+            }
+          },
+          {
+            text: 'Kyllä',
+            handler: () => {
+              console.log('"Kyllä" painettu');
+            }
+          }
+        ]
+      });
+      confirm.present();
+  }
 
 }
