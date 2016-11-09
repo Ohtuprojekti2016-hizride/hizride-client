@@ -20,7 +20,7 @@ export class HikerHomePage{
     this.platform = platform;
   }
 
-  ionViewLoaded(){
+  ionViewDidLoad(){
     this.loadMap();
   }
 
