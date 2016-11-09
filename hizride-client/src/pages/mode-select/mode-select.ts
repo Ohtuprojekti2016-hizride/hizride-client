@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
 import {NavController} from "ionic-angular";
-import {DriverHomePage} from "../driver-home/driver-home";
-import {HikerHomePage} from "../hiker-home/hiker-home";
 import {TabsPage} from "../tabs/tabs";
 
 @Component({
@@ -12,13 +10,10 @@ export class ModeSelectPage {
   }
 
   chooseDriver() {
-    //this.navCtrl.push(DriverHome);
-    //this.navCtrl.setRoot(DriverHomePage);
     this.navCtrl.setRoot(TabsPage, {rootPage:"driver-home"})
   }
 
   chooseHiker(){
-    //this.navCtrl.setRoot(HikerHomePage);
     this.navCtrl.setRoot(TabsPage, {rootPage:"hiker-home"})
   }
 }

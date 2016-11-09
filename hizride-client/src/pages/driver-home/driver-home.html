@@ -1,12 +1,9 @@
 <ion-header>
 <ion-toolbar>
-  <ion-buttons start>
-  <button (click)="addMarker()"><ion-icon name="add"></ion-icon>Lisää noutopaikka</button>
+  <ion-buttons end>
+  <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Lisää noutopaikka</button>
+  <button (click)="showConfirm()" ion-button><ion-icon name="ios-alert"></ion-icon>Liftari Lähellä</button>
   </ion-buttons>
-    <ion-buttons end>
-      <button (click)="showConfirm()"><ion-icon name="ios-alert"></ion-icon>Liftari Lähellä</button>
-    </ion-buttons>
-  
 </ion-toolbar>
 <input class="controls" id="journey_to" name="journey_to" type="text" placeholder="Enter location"[(ngModel)]="toValue">
 </ion-header>
