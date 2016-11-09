@@ -17,10 +17,11 @@ export class DriverHomePage implements OnInit{
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
-
+  boxpolys = null;
+  places = [];
   constructor(public navCtrl: NavController, public platform: Platform, public alertCtrl: AlertController, public user: User) {
- 	this.toValue = "";
-  this.platform = platform;
+ 	  this.toValue = "";
+    this.platform = platform;
   }
 
   ionViewDidLoad(){
@@ -36,12 +37,12 @@ export class DriverHomePage implements OnInit{
 
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var routeBoxer = new RouteBoxer();
-    var distance = 0.01; //km
+    var distance = 0.1; //km
 
-      console.log("routeboxer ready: " + routeBoxer);
+    console.log("routeboxer ready: " + routeBoxer);
     Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
-console.log("3");
+    console.log("3");
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
       let mapOptions = {
@@ -120,6 +121,8 @@ console.log("3");
         if (status == 'OK') {
           directionsDisplay.setDirections(result);
           var boxes = routeBoxer.box(result.routes[0].overview_path,distance);
+          self.clearBoxes();
+          self.drawBoxes(boxes);
           self.searchBounds(boxes, self.map);
         }
       });
@@ -139,33 +142,45 @@ searchBounds(boxes, map){
   console.log("searchboxes amount: " + boxes.length);
   var self = this;
 
-  var service = new google.maps.places.PlacesService(this.map);
-
+  var service = new google.maps.places.PlacesService(map);
   for(var i = 0; i< boxes.length;i++){
+    let bound = boxes[i];
     var request = {
       query: "bus station",
-      bounds: boxes[i],
+      bounds: bound,
     };
-    service.textSearch(request, busStopSearch, boxes[i]);
+
+
+    service.textSearch(request, busStopSearch)
+
+
     console.log(request);
   }
 
-  function busStopSearch(results, status, bound) {
-    console.log("Results length: " + results.length)
-    console.log("Results[0]: " + results[0].name)
-    console.log("currentbound: " + bound);
+  function busStopSearch(results, status) {
+    console.log("Searching...");
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
-        if(bound.contains(new google.maps.LatLng(results[i].geometry.location.lat,results[i].geometry.location.lng))) {
-          createMarker(results[i]);
-        }
+        //if (bound.contains(new google.maps.LatLng(results[i].geometry.location.lat(), results[i].geometry.location.lng()))) {
+        if(!placeExists(results[i].id))
+          self.places.push(results[i]);
+          createMarker(self.places[i]);
+       // }
+      }
+      console.log("Results length: " + self.places.length)
+    }
+  }
+  function placeExists(place){
+    for(var i = 0; i< self.places.length;i++){
+      if(self.places[i].id === place){
+        return true;
+      }else{
+        return false;
       }
     }
   }
-
   function createMarker(place) {
 
-    var placeLoc = place.geometry.location;
       var marker = new google.maps.Marker({
         map: self.map,
         position: place.geometry.location
@@ -173,6 +188,27 @@ searchBounds(boxes, map){
     }
   };
 
+drawBoxes(boxes) {
+  this.boxpolys = new Array(boxes.length);
+  for (var i = 0; i < boxes.length; i++) {
+    this.boxpolys[i] = new google.maps.Rectangle({
+      bounds: boxes[i],
+      fillOpacity: 0,
+      strokeOpacity: 1.0,
+      strokeColor: '#000000',
+      strokeWeight: 1,
+      map: this.map
+    });
+  }
+}
+clearBoxes() {
+  if (this.boxpolys != null) {
+    for (var i = 0; i < this.boxpolys.length; i++) {
+      this.boxpolys[i].setMap(null);
+    }
+  }
+  this.boxpolys = null;
+}
 
 addMarker(){
 
