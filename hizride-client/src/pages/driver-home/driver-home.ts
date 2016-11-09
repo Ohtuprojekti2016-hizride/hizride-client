@@ -36,7 +36,7 @@ export class DriverHomePage implements OnInit{
 
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var routeBoxer = new RouteBoxer();
-    var distance = 0.1; //km
+    var distance = 0.01; //km
 
       console.log("routeboxer ready: " + routeBoxer);
     Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
@@ -120,7 +120,7 @@ console.log("3");
         if (status == 'OK') {
           directionsDisplay.setDirections(result);
           var boxes = routeBoxer.box(result.routes[0].overview_path,distance);
-          self.searchBounds(boxes);
+          self.searchBounds(boxes, self.map);
         }
       });
 
@@ -135,13 +135,45 @@ console.log("3");
 	});
   });
 	  }
-searchBounds(boxes){
+searchBounds(boxes, map){
   console.log("searchboxes amount: " + boxes.length);
+  var self = this;
+
+  var service = new google.maps.places.PlacesService(this.map);
+
   for(var i = 0; i< boxes.length;i++){
-    console.log("search box " + i + ": " + boxes[i]);
+    var request = {
+      query: "bus station",
+      bounds: boxes[i],
+    };
+    service.textSearch(request, busStopSearch, boxes[i]);
+    console.log(request);
   }
-  
-}
+
+  function busStopSearch(results, status, bound) {
+    console.log("Results length: " + results.length)
+    console.log("Results[0]: " + results[0].name)
+    console.log("currentbound: " + bound);
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        if(bound.contains(new google.maps.LatLng(results[i].geometry.location.lat,results[i].geometry.location.lng))) {
+          createMarker(results[i]);
+        }
+      }
+    }
+  }
+
+  function createMarker(place) {
+
+    var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+        map: self.map,
+        position: place.geometry.location
+      });
+    }
+  };
+
+
 addMarker(){
 
   let marker = new google.maps.Marker({
