@@ -127,8 +127,10 @@ export class DriverHomePage implements OnInit {
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
 								
-								if (google.maps.geometry.poly.isLocationOnEdge(latLng, newPolyline, 10e-1)) {
-									alert("Relocate!");
+								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
+								
+								if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
+									alert("Huu!");
 								}
 								
 							}
