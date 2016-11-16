@@ -70,7 +70,7 @@ export class HikerHomePage implements OnInit{
             //types: ['restaurant']
           };
 
-          service.textSearch(request, callback);
+          service.radarSearch(request, callback);
         });
 
         function callback(results, status) {
@@ -139,8 +139,8 @@ export class HikerHomePage implements OnInit{
         console.log(err);
       });
     });
-  } 
-	 
+  }
+
 addMarker(){
 
   let marker = new google.maps.Marker({
