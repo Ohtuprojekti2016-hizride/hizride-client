@@ -17,7 +17,7 @@ export class DriverHomePage implements OnInit{
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   toValue:string;
-  boxpolys = null;
+  boxpolys = [];
   places = [];
   constructor(public navCtrl: NavController, public platform: Platform, public alertCtrl: AlertController, public user: User) {
  	  this.toValue = "";
@@ -37,7 +37,7 @@ export class DriverHomePage implements OnInit{
 
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var routeBoxer = new RouteBoxer();
-    var distance = 0.01; //km
+    var distance = 0.2; //km
 
     console.log("routeboxer ready: " + routeBoxer);
     Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
@@ -50,7 +50,7 @@ export class DriverHomePage implements OnInit{
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
-
+    
 	  // create the map itself
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
@@ -124,8 +124,10 @@ export class DriverHomePage implements OnInit{
           self.clearBoxes();
           self.drawBoxes(boxes);
           self.searchBounds(boxes, self.map);
+
         }
       });
+
 
      // self.map.fitBounds(bounds);
 
@@ -146,25 +148,26 @@ searchBounds(boxes, map){
   for(var i = 0; i< boxes.length;i++){
     let bound = boxes[i];
     var request = {
-      query: "bus station",
+      keyword: "bus station",
       bounds: bound,
     };
 
-
-    service.textSearch(request, busStopSearch)
-
+    //console.log(bound);
+    service.radarSearch(request, busStopSearch)
 
     console.log(request);
   }
 
   function busStopSearch(results, status) {
-    console.log("Searching...");
+    //console.log("Searching...");
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
         //if (bound.contains(new google.maps.LatLng(results[i].geometry.location.lat(), results[i].geometry.location.lng()))) {
         if(!placeExists(results[i].id))
           self.places.push(results[i]);
-        console.log(results[i]);
+
+          console.log(results[i]);
+
           createMarker(results[i]);
        // }
       }
@@ -174,9 +177,23 @@ searchBounds(boxes, map){
   function placeExists(place){
     for(var i = 0; i< self.places.length;i++){
       if(self.places[i].id === place){
+      console.log("Sama paikka hylätään: " + self.places[i].id)
         return true;
       }else{
         return false;
+      }
+    }
+  }
+  function createMarkers(bounds){
+    for(var i=0;i<self.places.length;i++){
+      for(var j= 0; j<bounds.length;j++){
+      if(bounds[j].contains(new google.maps.LatLng(self.places[i].geometry.location.lat(), self.places[i].geometry.location.lng()))){
+        var marker = new google.maps.Marker({
+          map: self.map,
+          position: self.places[i].geometry.location
+        });
+      }
+
       }
     }
   }
