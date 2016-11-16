@@ -20,7 +20,7 @@ export class HikerHomePage implements OnInit{
     this.platform = platform;
   }
 
-  ionViewLoaded(){
+  ionViewDidLoad(){
     this.loadMap();
   }
 
