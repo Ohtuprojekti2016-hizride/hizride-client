@@ -37,7 +37,7 @@ export class DriverHomePage implements OnInit{
 
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var routeBoxer = new RouteBoxer();
-    var distance = 0.1; //km
+    var distance = 0.01; //km
 
     console.log("routeboxer ready: " + routeBoxer);
     Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
@@ -164,7 +164,8 @@ searchBounds(boxes, map){
         //if (bound.contains(new google.maps.LatLng(results[i].geometry.location.lat(), results[i].geometry.location.lng()))) {
         if(!placeExists(results[i].id))
           self.places.push(results[i]);
-          createMarker(self.places[i]);
+        console.log(results[i]);
+          createMarker(results[i]);
        // }
       }
       console.log("Results length: " + self.places.length)
