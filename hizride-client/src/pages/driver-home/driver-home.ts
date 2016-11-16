@@ -29,7 +29,7 @@ export class DriverHomePage implements OnInit {
 
 	loadMap() {
 		console.log("0");
-		
+
 		this.platform.ready().then(() => {
 			var directionsService = new google.maps.DirectionsService();
 			var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -103,22 +103,15 @@ export class DriverHomePage implements OnInit {
 						bounds.extend(place.geometry.location);
 						}
 						*/
-				  
+
 						var request = {
 							origin: latLng,
 							destination: place.geometry.location,
 							travelMode: 'DRIVING'
 						};
-						
-						var cascadiaFault = new google.maps.Polyline({
-							path: [
-							  new google.maps.LatLng(49.95, -128.1),
-							  new google.maps.LatLng(46.26, -126.3),
-							  new google.maps.LatLng(40.3, -125.4)
-							]
-						});
-						console.log(cascadiaFault);
-						
+
+
+
 						directionsService.route(request, function(result, status) {
 							if (status == 'OK') {
 								directionsDisplay.setDirections(result);
@@ -126,17 +119,17 @@ export class DriverHomePage implements OnInit {
 								let newPolyline = new google.maps.Polyline({
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
-								
+
 								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
-								
+
 								if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
 									alert("Huu!");
 								}
-								
+
 							}
 						});
-					
-						
+
+
 						//self.map.fitBounds(bounds);
 					}
 				});
@@ -159,7 +152,7 @@ addMarker(){
 
   this.addInfoWindow(marker, content);
 
-}	
+}
 
 addInfoWindow(marker, content){
 
