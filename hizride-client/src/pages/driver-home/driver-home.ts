@@ -1,8 +1,9 @@
-import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
-import { Auth, User } from '@ionic/cloud-angular';
-import { NavController, Platform } from 'ionic-angular';
+import {Component, ViewChild, ElementRef} from '@angular/core';
+import { User } from '@ionic/cloud-angular';
+import { Platform } from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import { AlertController } from 'ionic-angular';
+import {ActionCableService} from "../../providers/action-cable";
 
 declare var google;
 
@@ -12,22 +13,26 @@ declare var google;
   templateUrl: 'driver-home.html'
 })
 
-export class DriverHomePage implements OnInit {
+export class DriverHomePage {
 
 	@ViewChild('map') mapElement: ElementRef;
 	map: any;
 	toValue:string;
 
-	constructor(public navCtrl: NavController, public platform: Platform, public alertCtrl: AlertController, public user: User) {
-		this.toValue = "";
-		this.platform = platform;
-	}
+  public constructor(public platform: Platform,
+                     public alertCtrl: AlertController,
+                     public user: User,
+                     public actionCable: ActionCableService) {
+    this.toValue = "";
+    this.platform = platform;
+  }
 
 	ionViewDidLoad() {
 		this.loadMap();
 	}
 
 	loadMap() {
+    var self = this;
 		console.log("0");
 
 		this.platform.ready().then(() => {
@@ -129,7 +134,6 @@ export class DriverHomePage implements OnInit {
 							}
 						});
 
-
 						//self.map.fitBounds(bounds);
 					}
 				});
@@ -140,64 +144,56 @@ export class DriverHomePage implements OnInit {
 		});
 	}
 
-addMarker(){
+  addMarker(){
 
-  let marker = new google.maps.Marker({
-    map: this.map,
-    animation: google.maps.Animation.DROP,
-    position: this.map.getCenter()
-  });
-
-  let content = "<h4>Information!</h4>";
-
-  this.addInfoWindow(marker, content);
-
-}
-
-addInfoWindow(marker, content){
-
-  let infoWindow = new google.maps.InfoWindow({
-    content: content
-  });
-
-  google.maps.event.addListener(marker, 'click', () => {
-    infoWindow.open(this.map, marker);
-  });
-
-}
-
-ngOnInit(){
-
-}
-
-
-
-showConfirm() {
-	var name = this.user.social.facebook.data.full_name;
-	var pic = this.user.social.facebook.data.profile_picture;
-	console.log(pic);
-    let confirm = this.alertCtrl.create({
-      title: 'Liftari lähellä!',
-      message: 'Haluatko ottaa tämän henkilön kyytiin? ' + name + '<br><img src="' + pic + '" alt="profiilikuva">',
-      buttons: [
-        {
-          text: 'Ei',
-          handler: () => {
-            console.log('"Ei" painettu');
-          }
-        },
-        {
-          text: 'Kyllä',
-          handler: () => {
-            console.log('"Kyllä" painettu');
-          }
-        }
-      ]
+    let marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: this.map.getCenter()
     });
-    confirm.present();
+
+    let content = "<h4>Information!</h4>";
+
+    this.addInfoWindow(marker, content);
+
+  }
+
+  addInfoWindow(marker, content){
+
+    let infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
+    });
+
   }
 
 
-
+  showConfirm() {
+    var name = this.user.social.facebook.data.full_name;
+    var pic = this.user.social.facebook.data.profile_picture;
+    console.log(pic);
+      let confirm = this.alertCtrl.create({
+        title: 'Liftari lähellä!',
+        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + name + '<br><img src="' + pic + '" alt="profiilikuva">',
+        buttons: [
+          {
+            text: 'Ei',
+            handler: () => {
+              console.log('"Ei" painettu');
+            }
+          },
+          {
+            text: 'Kyllä',
+            handler: () => {
+              console.log('"Kyllä" painettu');
+            }
+          }
+        ]
+      });
+      confirm.present();
+  }
 
 }

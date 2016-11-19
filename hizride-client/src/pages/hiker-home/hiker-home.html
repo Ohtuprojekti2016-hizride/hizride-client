@@ -1,14 +1,26 @@
 <ion-header>
   <ion-toolbar>
-
     <ion-buttons end>
       <button (click)="addMarker()" ion-button><ion-icon name="add"></ion-icon>Lisää noutopaikka</button>
     </ion-buttons>
-	<p class="label">To</p>
-	<input id="journey_to" name="journey_to" type="text" placeholder="Enter location"[(ngModel)]="toValue">
-    </ion-toolbar>
+  </ion-toolbar>
+  <input id="journey_to" name="journey_to" type="text" placeholder="Enter location"[(ngModel)]="toValue">
 </ion-header>
 
 <ion-content>
   <div #map id="map"></div>
 </ion-content>
+
+<style>
+.controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+</style>
