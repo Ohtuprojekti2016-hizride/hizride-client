@@ -18,18 +18,16 @@ export class HikerHomePage {
   toValue:string;
 
   busStops = [];
- constructor(public platform:Platform, public actionCable: ActionCableService) {
+
+  constructor(public platform:Platform, public actionCable: ActionCableService) {
     console.log("constructor");
- 	this.toValue = "";
+ 	  this.toValue = "";
     this.platform = platform;
     this.loadMap();
   }
 
-// kato toimiiks tää:
   ionViewLoaded(){
     console.log("sioadgjri");
-
-  //ionViewDidLoad(){
     this.loadMap();
   }
 
@@ -72,9 +70,9 @@ export class HikerHomePage {
         // add the first listener
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
 
-        let place = autocomplete.getPlace();
-        let geometry = place.geometry;
-        
+          let place = autocomplete.getPlace();
+          let geometry = place.geometry;
+
           var service = new google.maps.places.PlacesService(self.map);
           directionsDisplay.setMap(self.map);
 
@@ -84,6 +82,7 @@ export class HikerHomePage {
             radius: 50000,
             //types: ['restaurant']
           };
+
           var routerequest = {
             origin: latLng,
             destination: place.geometry.location,
@@ -112,27 +111,18 @@ export class HikerHomePage {
                       createMarker(self.busStops[i]);
                     }
                   }
-
-
                 }
               });
-
             }
           });
-
-
-
         });
 
         function createMarker(place) {
-
           new google.maps.Marker({
             map: self.map,
             position: place.geometry.location
           });
         }
-
-
       }, (err) => {
         console.log(err);
       });
@@ -141,7 +131,6 @@ export class HikerHomePage {
 
 
   addMarker(){
-
     let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
@@ -151,7 +140,6 @@ export class HikerHomePage {
     let content = "<h4>Information!</h4>";
 
     this.addInfoWindow(marker, content);
-
   }
 
   addInfoWindow(marker, content){
