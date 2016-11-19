@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import 'actioncable-js';
+import 'actioncable';
 
-declare let ActionCable:any;
+//declare let ActionCable:any;
 
 /*
   Generated class for the ActionCable provider.
@@ -18,7 +18,6 @@ export class ActionCableService {
   app:any = {};
   constructor(
   ) {
-
     this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
     this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "user123"}, {
       connected: function() {
