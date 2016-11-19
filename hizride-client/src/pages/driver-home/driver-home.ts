@@ -15,9 +15,9 @@ declare var google;
 
 export class DriverHomePage {
 
-  @ViewChild('map') mapElement: ElementRef;
-  map: any;
-  toValue:string;
+	@ViewChild('map') mapElement: ElementRef;
+	map: any;
+	toValue:string;
 
   public constructor(public platform: Platform,
                      public alertCtrl: AlertController,
@@ -27,104 +27,122 @@ export class DriverHomePage {
     this.platform = platform;
   }
 
-  ionViewDidLoad(){
-    this.loadMap();
-  }
+	ionViewDidLoad() {
+		this.loadMap();
+	}
 
-  loadMap(){
+	loadMap() {
     var self = this;
-    console.log("0");
-    this.platform.ready().then(() => {
-    console.log("1" + this.platform);
-    var directionsService = new google.maps.DirectionsService();
-    console.log("2");
+		console.log("0");
 
-    var directionsDisplay = new google.maps.DirectionsRenderer();
+		this.platform.ready().then(() => {
+			var directionsService = new google.maps.DirectionsService();
+			var directionsDisplay = new google.maps.DirectionsRenderer();
 
-    Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
+			Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
-console.log("3");
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-      let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
+				let mapOptions = {
+					center: latLng,
+					zoom: 15,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				}
 
-	  // create the map itself
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+				// create the map itself
+				this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+				directionsDisplay.setMap(this.map);
 
+				// get he two fields
+				let input_to = (<HTMLInputElement>document.getElementById("journey_to"));
 
-      directionsDisplay.setMap(this.map);
+				// set the autocomplete options
+				let autocompleteOptions = {
+					types: [],
+					componentRestrictions: {country: "fi"}
+				};
 
-      // get the two fields
-	  let input_to = (<HTMLInputElement>document.getElementById("journey_to"));
+				// create the two autocompletes on the from and to fields
+				let autocomplete = new google.maps.places.Autocomplete(input_to, autocompleteOptions);
 
-	  // set the autocomplete options
-	  let autocompleteOptions = {
-		types: [],
-		componentRestrictions: {country: "fi"}
-	  };
+				// we need to save a reference to this as we lose it in the callbacks
+				let self = this;
 
-	  // create the two autocompletes on the from and to fields
-	  let autocomplete = new google.maps.places.Autocomplete(input_to, autocompleteOptions);
+				// add the first listener
+				// TODO
 
-	  // we need to save a reference to this as we lose it in the callbacks
-	  let self = this;
+				// add the second listener
+				google.maps.event.addListener(autocomplete, 'place_changed', function() {
+					let place = autocomplete.getPlace();
+					let geometry = place.geometry;
+					self.map.setCenter({ lat: -33.8688, lng: 151.2195 })
 
-	  // add the first listener
-	  // TODO
+					var bounds = new google.maps.LatLngBounds();
 
-	  // add the second listener
-	  google.maps.event.addListener(autocomplete, 'place_changed', function() {
-		  let place = autocomplete.getPlace();
-		  let geometry = place.geometry;
-		  self.map.setCenter({ lat: -33.8688, lng: 151.2195 });
+					if ((geometry) !== undefined) {
 
-		if ((geometry) !== undefined) {
+						console.log(place.name);
+						console.log(geometry.location.lng());
+						console.log(geometry.location.lat());
 
-		  console.log(place.name);
-		  console.log(geometry.location.lng());
-		  console.log(geometry.location.lat());
-
-		  var icon = {
-			  url: place.icon,
-			  size: new google.maps.Size(71, 71),
-			  origin: new google.maps.Point(0, 0),
-			  anchor: new google.maps.Point(17, 34),
-			  scaledSize: new google.maps.Size(25, 25)
-		  };
+						var icon = {
+							url: place.icon,
+							size: new google.maps.Size(71, 71),
+							origin: new google.maps.Point(0, 0),
+							anchor: new google.maps.Point(17, 34),
+							scaledSize: new google.maps.Size(25, 25)
+						};
 
 
-		  new google.maps.Marker({
-			  map: self.map,
-			  icon: icon,
-			  title: place.name,
-			  animation: google.maps.Animation.DROP,
-			  position: place.geometry.location,
-		  });
+						let marker = new google.maps.Marker({
+							map: self.map,
+							icon: icon,
+							title: place.name,
+							animation: google.maps.Animation.DROP,
+							position: place.geometry.location,
+						});
 
-      var request = {
-        origin: latLng,
-        destination: place.geometry.location,
-        travelMode: 'DRIVING'
-      };
-      directionsService.route(request, function(result, status) {
-        if (status == 'OK') {
-          directionsDisplay.setDirections(result);
-        }
-      });
+						/*if (place.geometry.viewport) {
+						bounds.union(place.geometry.viewport);
+						} else {
+						bounds.extend(place.geometry.location);
+						}
+						*/
 
-		   }
+						var request = {
+							origin: latLng,
+							destination: place.geometry.location,
+							travelMode: 'DRIVING'
+						};
 
+
+
+						directionsService.route(request, function(result, status) {
+							if (status == 'OK') {
+								directionsDisplay.setDirections(result);
+								let polyline = result.routes["0"].overview_polyline;
+								let newPolyline = new google.maps.Polyline({
+									path:google.maps.geometry.encoding.decodePath(polyline)
+								});
+
+								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
+
+								if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
+									alert("Huu!");
+								}
+
+							}
+						});
+
+						//self.map.fitBounds(bounds);
+					}
+				});
+
+			}, (err) => {
+				console.log(err);
+			});
 		});
-
-	}, (err) => {
-	  console.log(err);
-	});
-  });
-	  }
+	}
 
   addMarker(){
 
