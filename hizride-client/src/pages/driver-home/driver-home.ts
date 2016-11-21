@@ -123,11 +123,14 @@ export class DriverHomePage {
             directionsService.route(request, function(result, status) {
               if (status == 'OK') {
                 directionsDisplay.setDirections(result);
-                self.actionCable.sendRoute("reitti");
+
                 let polyline = result.routes["0"].overview_polyline;
                 let newPolyline = new google.maps.Polyline({
                   path:google.maps.geometry.encoding.decodePath(polyline)
                 });
+
+                // lähetetään polyline serverille:
+                self.actionCable.sendRoute(polyline);
 
                 let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
 
