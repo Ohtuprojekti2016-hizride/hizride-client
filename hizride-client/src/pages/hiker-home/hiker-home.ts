@@ -17,22 +17,28 @@ export class HikerHomePage {
   map: any;
   toValue:string;
 
-  constructor(public platform:Platform, public actionCable: ActionCableService) {
+  busStops = [];
+ constructor(public platform:Platform, public actionCable: ActionCableService) {
+    console.log("constructor");
  	this.toValue = "";
     this.platform = platform;
-  }
-
-  ionViewDidLoad(){
     this.loadMap();
   }
 
+  ionViewLoaded(){
+    console.log("sioadgjri");
+
+
   loadMap(){
-    console.log("0");
+    console.log("ladataan platform");
     this.platform.ready().then(() => {
-  console.log("1");
+      console.log("platform ready.");
+      var directionsService = new google.maps.DirectionsService();
+      var directionsDisplay = new google.maps.DirectionsRenderer();
 
       Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
+        console.log("lets go");
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         // current location lähetetään backendiin
@@ -66,27 +72,57 @@ export class HikerHomePage {
         // add the first listener
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
 
+        let place = autocomplete.getPlace();
+        let geometry = place.geometry;
+
           var service = new google.maps.places.PlacesService(self.map);
+          directionsDisplay.setMap(self.map);
 
           var request = {
             query: "bus station",
             location: latLng,
-            radius: 2500,
+            radius: 50000,
             //types: ['restaurant']
           };
+          var routerequest = {
+            origin: latLng,
+            destination: place.geometry.location,
+            travelMode: 'DRIVING'
+          };
 
-          service.textSearch(request, callback);
-        });
+          directionsService.route(routerequest, function(result, status) {
+            if (status == 'OK') {
+              directionsDisplay.setDirections(result);
+              let polyline = result.routes["0"].overview_polyline;
+              let newPolyline = new google.maps.Polyline({
+                path:google.maps.geometry.encoding.decodePath(polyline)
+              });
 
-        function callback(results, status) {
-          console.log("Results length: " + results.length);
-          console.log("Results[0]: " + results[0].name);
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            for (var i = 0; i < results.length; i++) {
-              createMarker(results[i]);
+              let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
+              service.textSearch(request, function(results,status){
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                  for (var i = 0; i < results.length; i++) {
+                    console.log(results[i]);
+                    self.busStops.push(results[i]);
+                  }
+
+                  for(let i =0;i<self.busStops.length;i++) {
+                    if (google.maps.geometry.poly.isLocationOnEdge(self.busStops[i].geometry.location, newPolyline, 0.0005)) {
+                      console.log("tämä pysäkki käy: " + self.busStops[i].geometry.location);
+                      createMarker(self.busStops[i]);
+                    }
+                  }
+
+
+                }
+              });
+
             }
-          }
-        }
+          });
+
+
+
+        });
 
         function createMarker(place) {
 
@@ -96,54 +132,13 @@ export class HikerHomePage {
           });
         }
 
-        // add the second listener
-        /*
-         google.maps.event.addListener(autocomplete, 'place_changed', function() {
-         let place = autocomplete.getPlace();
-         let geometry = place.geometry;
-         self.map.setCenter({ lat: -33.8688, lng: 151.2195 })
-
-         var bounds = new google.maps.LatLngBounds();
-
-         if ((geometry) !== undefined) {
-
-         console.log(place.name);
-         console.log(geometry.location.lng());
-         console.log(geometry.location.lat());
-
-         var icon = {
-         url: place.icon,
-         size: new google.maps.Size(71, 71),
-         origin: new google.maps.Point(0, 0),
-         anchor: new google.maps.Point(17, 34),
-         scaledSize: new google.maps.Size(25, 25)
-         };
-
-
-         let marker = new google.maps.Marker({
-         map: self.map,
-         icon: icon,
-         title: place.name,
-         animation: google.maps.Animation.DROP,
-         position: place.geometry.location,
-         });
-
-         if (place.geometry.viewport) {
-         bounds.union(place.geometry.viewport);
-         } else {
-         bounds.extend(place.geometry.location);
-         }
-         self.map.fitBounds(bounds);
-         }
-
-         });
-         */
 
       }, (err) => {
         console.log(err);
       });
     });
   }
+
 
   addMarker(){
 
@@ -158,6 +153,14 @@ export class HikerHomePage {
     this.addInfoWindow(marker, content);
 
   }
+  sendPosition(){
+    Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
+      //this.actionCable.updateLocation(position);
+      // current location lähetetään backendiin
+      var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
+      this.actionCable.sendCurrentLocation(coordinates);
+      });
+    }
 
   addInfoWindow(marker, content){
 
