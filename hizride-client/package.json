@@ -22,7 +22,7 @@
     "@angular/platform-server": "2.0.0",
     "@ionic/cloud-angular": "^0.7.0",
     "@ionic/storage": "1.0.3",
-    "@types/rails-actioncable": "0.0.21",
+    "@types/actioncable": "0.0.0",
     "actioncable": "^5.0.0",
     "ionic-angular": "2.0.0-rc.1",
     "ionic-native": "2.2.3",
