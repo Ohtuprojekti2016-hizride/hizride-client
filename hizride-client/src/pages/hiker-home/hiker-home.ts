@@ -27,9 +27,9 @@ export class HikerHomePage {
 
   ionViewLoaded(){
     console.log("sioadgjri");
+}
 
-
-  loadMap(){
+  loadMap() {
     console.log("ladataan platform");
     this.platform.ready().then(() => {
       console.log("platform ready.");
@@ -41,9 +41,6 @@ export class HikerHomePage {
         console.log("lets go");
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-        // current location lähetetään backendiin
-        var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
-        this.actionCable.sendCurrentLocation(coordinates);
 
         let mapOptions = {
           center: latLng,
