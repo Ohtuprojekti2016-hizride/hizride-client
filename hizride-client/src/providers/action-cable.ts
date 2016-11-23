@@ -33,10 +33,13 @@ export class ActionCableService {
         console.log(data)
       },
       sendMessage: function(data) {
-        this.perform("message", {message:data})
+        this.perform("message", {data: data})
       },
-      updateLocation(location) {
-        this.perform("setUserLocation", {location: location})
+      sendRoute: function(data) {
+        this.perform("set_route", {data: data})
+      },
+      sendCurrentLocation: function(data) {
+        this.perform("set_current_location", {data: data})
       }
     });
 
@@ -50,4 +53,15 @@ export class ActionCableService {
     this.app.messagesChannel.sendMessage(message)
   }
 
+  sendRoute(route) {
+    /*this.broadcaster.broadcast("route", route)*/
+    this.app.messagesChannel.sendRoute(route)
+  }
+
+  sendCurrentLocation(coordinates) {
+    /*this.broadcaster.broadcast("lat", lat)*/
+
+    var data = {lat:coordinates['lat'], lng:coordinates['lng']};
+    this.app.messagesChannel.sendCurrentLocation(data)
+  }
 }

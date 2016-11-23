@@ -25,25 +25,24 @@ export class HikerHomePage {
     this.loadMap();
   }
 
-// kato toimiiks tää:
   ionViewLoaded(){
     console.log("sioadgjri");
+}
 
-  //ionViewDidLoad(){
-    this.loadMap();
-  }
-
-  loadMap(){
+  loadMap() {
     console.log("ladataan platform");
     this.platform.ready().then(() => {
       console.log("platform ready.");
       var directionsService = new google.maps.DirectionsService();
+      console.log("directions.")
       var directionsDisplay = new google.maps.DirectionsRenderer();
+      console.log("jejejej.")
 
-      Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
+      Geolocation.getCurrentPosition().then((position) => {
 
         console.log("lets go");
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
 
         let mapOptions = {
           center: latLng,
@@ -74,7 +73,7 @@ export class HikerHomePage {
 
         let place = autocomplete.getPlace();
         let geometry = place.geometry;
-        
+
           var service = new google.maps.places.PlacesService(self.map);
           directionsDisplay.setMap(self.map);
 
@@ -134,7 +133,8 @@ export class HikerHomePage {
 
 
       }, (err) => {
-        console.log(err);
+        console.log(err.message);
+        console.log("hohohoho")
       });
     });
   }
@@ -153,6 +153,14 @@ export class HikerHomePage {
     this.addInfoWindow(marker, content);
 
   }
+  sendPosition(){
+    Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
+      //this.actionCable.updateLocation(position);
+      // current location lähetetään backendiin
+      var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
+      this.actionCable.sendCurrentLocation(coordinates);
+      });
+    }
 
   addInfoWindow(marker, content){
 
