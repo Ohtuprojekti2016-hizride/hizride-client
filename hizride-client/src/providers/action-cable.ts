@@ -17,6 +17,8 @@ export class ActionCableService {
 
 
   app:any = {};
+  hikerlist = {};
+
   constructor(
     public user: User
   ) {
@@ -34,6 +36,7 @@ export class ActionCableService {
       received: function(data) {
       // tää datan edelleenlähettämisjuttu pitää hoitaa
         console.log(data['body'])
+        this.hikerlist = data['body']
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
@@ -66,5 +69,10 @@ export class ActionCableService {
 
     var data = {lat:coordinates['lat'], lng:coordinates['lng']};
     this.app.messagesChannel.sendCurrentLocation(data)
+  }
+
+  getHikerlist() {
+    console.log("hikerlist");
+    return this.hikerlist;
   }
 }

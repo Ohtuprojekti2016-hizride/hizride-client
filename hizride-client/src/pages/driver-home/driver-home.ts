@@ -120,8 +120,6 @@ export class DriverHomePage {
 							travelMode: 'DRIVING'
 						};
 
-
-
 						directionsService.route(request, function(result, status) {
 							if (status == 'OK') {
 								directionsDisplay.setDirections(result);
@@ -130,6 +128,7 @@ export class DriverHomePage {
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
                 self.actionCable.sendRoute(polyline);
+                self.actionCable.getHikerlist();
 
 								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
 
