@@ -10,13 +10,10 @@ export class ModeSelectPage {
   }
 
   chooseDriver() {
-    //this.navCtrl.push(DriverHome);
-    //this.navCtrl.setRoot(DriverHomePage);
     this.navCtrl.setRoot(TabsPage, {rootPage:"driver-home"})
   }
 
   chooseHiker(){
-    //this.navCtrl.setRoot(HikerHomePage);
     this.navCtrl.setRoot(TabsPage, {rootPage:"hiker-home"})
   }
 }
