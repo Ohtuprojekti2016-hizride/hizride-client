@@ -38,9 +38,11 @@ export class HikerHomePage {
     this.platform.ready().then(() => {
       console.log("platform ready.");
       var directionsService = new google.maps.DirectionsService();
+      console.log("directions.")
       var directionsDisplay = new google.maps.DirectionsRenderer();
+      console.log("jejejej.")
 
-      Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
+      Geolocation.getCurrentPosition().then((position) => {
 
         console.log("lets go");
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -134,7 +136,8 @@ export class HikerHomePage {
 
 
       }, (err) => {
-        console.log(err);
+        console.log(err.message);
+        console.log("hohohoho")
       });
     });
   }
