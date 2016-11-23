@@ -74,7 +74,7 @@ export class HikerHomePage {
 
         let place = autocomplete.getPlace();
         let geometry = place.geometry;
-        
+
           var service = new google.maps.places.PlacesService(self.map);
           directionsDisplay.setMap(self.map);
 
@@ -153,6 +153,11 @@ export class HikerHomePage {
     this.addInfoWindow(marker, content);
 
   }
+  sendPosition(){
+    Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
+      this.actionCable.updateLocation(position);
+      });
+    }
 
   addInfoWindow(marker, content){
 
