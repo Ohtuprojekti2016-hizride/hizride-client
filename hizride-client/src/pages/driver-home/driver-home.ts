@@ -34,7 +34,7 @@ export class DriverHomePage {
 
 	loadMap() {
     var self = this;
-    
+
 
 		this.platform.ready().then(() => {
 			var directionsService = new google.maps.DirectionsService();
@@ -129,7 +129,7 @@ export class DriverHomePage {
 								let newPolyline = new google.maps.Polyline({
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
-                self.actionCable.sendRoute("reitti");
+                self.actionCable.sendRoute(polyline);
 
 								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
 
@@ -149,6 +149,11 @@ export class DriverHomePage {
 			});
 		});
 	}
+
+showHikers(data) {
+  let hikers = data;
+  console.log("hikers näkyy");
+}
 
   addMarker(){
 

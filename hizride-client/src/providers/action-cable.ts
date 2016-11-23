@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
+import { User } from '@ionic/cloud-angular';
 
 import 'actioncable';
 
@@ -17,9 +18,10 @@ export class ActionCableService {
 
   app:any = {};
   constructor(
+    public user: User
   ) {
     this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
-    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "user123"}, {
+    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "gdg"}, {
       connected: function() {
         console.log("connected", this.identifier)
       },
@@ -30,7 +32,8 @@ export class ActionCableService {
         console.log("rejected")
       },
       received: function(data) {
-        console.log(data)
+      // tää datan edelleenlähettämisjuttu pitää hoitaa
+        console.log(data['body'])
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
