@@ -19,6 +19,7 @@ export class DriverHomePage {
 	map: any;
 	toValue:string;
 
+
   public constructor(public platform: Platform,
                      public alertCtrl: AlertController,
                      public user: User,
@@ -33,7 +34,7 @@ export class DriverHomePage {
 
 	loadMap() {
     var self = this;
-		console.log("0");
+    
 
 		this.platform.ready().then(() => {
 			var directionsService = new google.maps.DirectionsService();
@@ -42,6 +43,10 @@ export class DriverHomePage {
 			Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
 				let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        // current location lähetetään backendiin
+        var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
+        this.actionCable.sendCurrentLocation(coordinates);
 
 				let mapOptions = {
 					center: latLng,
@@ -124,6 +129,7 @@ export class DriverHomePage {
 								let newPolyline = new google.maps.Polyline({
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
+                self.actionCable.sendRoute("reitti");
 
 								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
 

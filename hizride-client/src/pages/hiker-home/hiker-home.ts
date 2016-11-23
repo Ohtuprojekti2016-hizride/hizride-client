@@ -25,15 +25,11 @@ export class HikerHomePage {
     this.loadMap();
   }
 
-// kato toimiiks tää:
   ionViewLoaded(){
     console.log("sioadgjri");
+}
 
-  //ionViewDidLoad(){
-    this.loadMap();
-  }
-
-  loadMap(){
+  loadMap() {
     console.log("ladataan platform");
     this.platform.ready().then(() => {
       console.log("platform ready.");
@@ -46,6 +42,7 @@ export class HikerHomePage {
 
         console.log("lets go");
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
 
         let mapOptions = {
           center: latLng,
@@ -158,7 +155,10 @@ export class HikerHomePage {
   }
   sendPosition(){
     Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
-      this.actionCable.updateLocation(position);
+      //this.actionCable.updateLocation(position);
+      // current location lähetetään backendiin
+      var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
+      this.actionCable.sendCurrentLocation(coordinates);
       });
     }
 
