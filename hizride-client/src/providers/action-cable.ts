@@ -36,6 +36,9 @@ export class ActionCableService {
       received: function(data) {
       // tää datan edelleenlähettämisjuttu pitää hoitaa
         console.log(data['body'])
+        var json = data['body']
+        var fb = json.facebook_id
+        console.log(fb)
         this.hikerlist = data['body']
       },
       sendMessage: function(data) {
@@ -46,6 +49,9 @@ export class ActionCableService {
       },
       sendCurrentLocation: function(data) {
         this.perform("set_current_location", {data: data})
+      },
+      sendUid: function(data) {
+        this.perform("set_facebook_id", {data: data})
       }
     });
 
@@ -69,6 +75,11 @@ export class ActionCableService {
 
     var data = {lat:coordinates['lat'], lng:coordinates['lng']};
     this.app.messagesChannel.sendCurrentLocation(data)
+  }
+
+  sendUid(uid) {
+    /*this.broadcaster.broadcast("uid", uid)*/
+    this.app.messagesChannel.sendUid(uid)
   }
 
   getHikerlist() {
