@@ -34,11 +34,8 @@ export class ActionCableService {
         console.log("rejected")
       },
       received: function(data) {
-      // tää datan edelleenlähettämisjuttu pitää hoitaa
+        console.log("message received")
         console.log(data['body'])
-        var json = data['body']
-        var fb = json.facebook_id
-        console.log(fb)
         this.hikerlist = data['body']
       },
       sendMessage: function(data) {
@@ -83,7 +80,8 @@ export class ActionCableService {
   }
 
   getHikerlist() {
-    console.log("hikerlist");
+    console.log(this.hikerlist);
+    console.log("dgfd");
     return this.hikerlist;
   }
 }
