@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
+import { User } from '@ionic/cloud-angular';
 
 import 'actioncable';
 
@@ -16,10 +17,13 @@ export class ActionCableService {
 
 
   app:any = {};
+  hikerlist = {};
+
   constructor(
+    public user: User
   ) {
     this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
-    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "user123"}, {
+    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "gdg"}, {
       connected: function() {
         console.log("connected", this.identifier)
       },
@@ -30,7 +34,9 @@ export class ActionCableService {
         console.log("rejected")
       },
       received: function(data) {
-        console.log(data)
+        console.log("message received")
+        console.log(data['body'])
+        this.hikerlist = data['body']
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
@@ -40,6 +46,9 @@ export class ActionCableService {
       },
       sendCurrentLocation: function(data) {
         this.perform("set_current_location", {data: data})
+      },
+      sendUid: function(data) {
+        this.perform("set_facebook_id", {data: data})
       }
     });
 
@@ -63,5 +72,16 @@ export class ActionCableService {
 
     var data = {lat:coordinates['lat'], lng:coordinates['lng']};
     this.app.messagesChannel.sendCurrentLocation(data)
+  }
+
+  sendUid(uid) {
+    /*this.broadcaster.broadcast("uid", uid)*/
+    this.app.messagesChannel.sendUid(uid)
+  }
+
+  getHikerlist() {
+    console.log(this.hikerlist);
+    console.log("dgfd");
+    return this.hikerlist;
   }
 }
