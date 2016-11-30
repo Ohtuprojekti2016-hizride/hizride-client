@@ -35,7 +35,6 @@ export class DriverHomePage {
 	loadMap() {
     var self = this;
 
-
 		this.platform.ready().then(() => {
 			var directionsService = new google.maps.DirectionsService();
 			var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -84,30 +83,11 @@ export class DriverHomePage {
 					let geometry = place.geometry;
 					self.map.setCenter({ lat: -33.8688, lng: 151.2195 })
 
-					var bounds = new google.maps.LatLngBounds();
-
 					if ((geometry) !== undefined) {
 
 						console.log(place.name);
 						console.log(geometry.location.lng());
 						console.log(geometry.location.lat());
-
-						var icon = {
-							url: place.icon,
-							size: new google.maps.Size(71, 71),
-							origin: new google.maps.Point(0, 0),
-							anchor: new google.maps.Point(17, 34),
-							scaledSize: new google.maps.Size(25, 25)
-						};
-
-
-						let marker = new google.maps.Marker({
-							map: self.map,
-							icon: icon,
-							title: place.name,
-							animation: google.maps.Animation.DROP,
-							position: place.geometry.location,
-						});
 
 						/*if (place.geometry.viewport) {
 						bounds.union(place.geometry.viewport);
@@ -122,8 +102,6 @@ export class DriverHomePage {
 							travelMode: 'DRIVING'
 						};
 
-
-
 						directionsService.route(request, function(result, status) {
 							if (status == 'OK') {
 								directionsDisplay.setDirections(result);
@@ -131,7 +109,8 @@ export class DriverHomePage {
 								let newPolyline = new google.maps.Polyline({
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
-                self.actionCable.sendRoute("reitti");
+                self.actionCable.sendRoute(polyline);
+                self.actionCable.getHikerlist();
 
 								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
 
@@ -151,6 +130,11 @@ export class DriverHomePage {
 			});
 		});
 	}
+
+showHikers(data) {
+  let hikers = data;
+  console.log("hikers näkyy");
+}
 
   addMarker(){
 

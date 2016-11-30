@@ -25,6 +25,7 @@ export class HomePage {
         this.platform.ready().then(() => {
             this.auth.login('facebook').then(() => {
             console.log(this.user.social.facebook.data.full_name);
+            this.actionCable.sendUid(this.user.social.facebook.uid);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
             console.log("error: " + error );
@@ -58,6 +59,7 @@ export class HomePage {
 
   public skipLogin(){
     this.actionCable.sendMessage("Skipped login, sending message");
+    this.actionCable.sendUid("kirjautumaton");
     this.navCtrl.push(ModeSelectPage);
   }
 

@@ -72,7 +72,6 @@ export class HikerHomePage {
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
 
         let place = autocomplete.getPlace();
-        let geometry = place.geometry;
 
           var service = new google.maps.places.PlacesService(self.map);
           directionsDisplay.setMap(self.map);
@@ -97,7 +96,6 @@ export class HikerHomePage {
                 path:google.maps.geometry.encoding.decodePath(polyline)
               });
 
-              let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
               service.textSearch(request, function(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                   for (var i = 0; i < results.length; i++) {
