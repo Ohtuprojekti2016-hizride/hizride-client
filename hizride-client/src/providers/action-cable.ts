@@ -42,7 +42,10 @@ export class ActionCableService {
       received: function(data) {
         console.log("message received")
         console.log(data['body'])
-        this.hikerlist = data['body']
+        this.hikerlist = JSON.parse(data['body'])
+        for (let x of this.hikerlist) {
+          console.log(x)
+        }
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
