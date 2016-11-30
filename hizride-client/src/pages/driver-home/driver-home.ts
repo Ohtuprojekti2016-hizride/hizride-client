@@ -34,11 +34,13 @@ export class DriverHomePage {
 
 	loadMap() {
     var self = this;
-    
+
 
 		this.platform.ready().then(() => {
 			var directionsService = new google.maps.DirectionsService();
 			var directionsDisplay = new google.maps.DirectionsRenderer();
+
+			//this.actionCable.login(this.user.uid());
 
 			Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 

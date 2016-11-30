@@ -15,6 +15,7 @@
   <allow-intent href="*"/>
   <allow-navigation href="*"/>
   <allow-navigation href="http://172.20.10.6:8100"/>
+  <allow-navigation href="http://10.112.23.194:8100"/>
   <platform name="android">
     <allow-navigation href="*"/>
     <allow-intent href="*"/>

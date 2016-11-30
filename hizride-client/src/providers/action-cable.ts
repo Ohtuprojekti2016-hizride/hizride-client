@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import 'actioncable';
+import {Device} from "ionic-native";
+import {UUID} from "angular2-uuid";
 
 //declare let ActionCable:any;
 
@@ -18,8 +20,12 @@ export class ActionCableService {
   app:any = {};
   constructor(
   ) {
+    let uuid = Device.device.uuid
+    if(!uuid){
+      uuid = UUID.UUID()
+    }
     this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
-    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "user123"}, {
+    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: uuid}, {
       connected: function() {
         console.log("connected", this.identifier)
       },
@@ -40,9 +46,16 @@ export class ActionCableService {
       },
       sendCurrentLocation: function(data) {
         this.perform("set_current_location", {data: data})
+      },
+      login: function(user) {
+        this.perform("login", {user: user})
       }
     });
 
+  }
+
+  login(user) {
+    this.app.messagesChannel.login(user)
   }
 
   updateLocation(location) {
