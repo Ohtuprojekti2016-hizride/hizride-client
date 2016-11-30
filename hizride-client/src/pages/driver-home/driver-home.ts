@@ -33,8 +33,6 @@ export class DriverHomePage {
 	}
 
 	loadMap() {
-    var self = this;
-
 		this.platform.ready().then(() => {
 			var directionsService = new google.maps.DirectionsService();
 			var directionsDisplay = new google.maps.DirectionsRenderer();
