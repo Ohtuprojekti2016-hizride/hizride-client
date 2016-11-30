@@ -128,7 +128,12 @@ export class DriverHomePage {
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
                 self.actionCable.sendRoute(polyline);
-                self.actionCable.getHikerlist();
+                self.actionCable.getHikerlist(function(hikerlist){
+                  console.log(hikerlist);
+                  for(var i = 0; i < hikerlist.length;i++){
+                    console.log(hikerlist[i]);
+                  }
+                });
 
 								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
 

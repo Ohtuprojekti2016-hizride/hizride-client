@@ -79,9 +79,10 @@ export class ActionCableService {
     this.app.messagesChannel.sendUid(uid)
   }
 
-  getHikerlist() {
+  getHikerlist(callback) {
     console.log(this.hikerlist);
     console.log("dgfd");
-    return this.hikerlist;
+
+    callback(this.hikerlist);
   }
 }
