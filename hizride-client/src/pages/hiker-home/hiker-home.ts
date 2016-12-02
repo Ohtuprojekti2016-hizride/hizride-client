@@ -38,6 +38,8 @@ export class HikerHomePage {
       var directionsDisplay = new google.maps.DirectionsRenderer();
       console.log("jejejej.")
 
+      this.actionCable.sendRole("hiker");
+
       Geolocation.getCurrentPosition().then((position) => {
 
         console.log("lets go");

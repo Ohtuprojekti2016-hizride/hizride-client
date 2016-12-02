@@ -37,7 +37,9 @@ export class DriverHomePage {
 			var directionsService = new google.maps.DirectionsService();
 			var directionsDisplay = new google.maps.DirectionsRenderer();
 
-			//this.actionCable.login(this.user.uid());
+      this.actionCable.sendRole("driver");
+
+      //this.actionCable.login(this.user.uid());
 
 			Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 

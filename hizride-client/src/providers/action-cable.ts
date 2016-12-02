@@ -4,7 +4,7 @@ import { User } from '@ionic/cloud-angular';
 
 import 'actioncable';
 import {Device} from "ionic-native";
-import {UUID} from "angular2-uuid";
+//import {UUID} from "angular2-uuid";
 
 //declare let ActionCable:any;
 
@@ -24,12 +24,12 @@ export class ActionCableService {
   constructor(
     public user: User
   ) {
-    let uuid = Device.device.uuid
-    if(!uuid){
-      uuid = UUID.UUID()
-    }
+    //let uuid = Device.device.uuid
+    //if(!uuid){
+      //uuid = UUID.UUID()
+    //}
     this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
-    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: uuid}, {
+    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "uuid"}, {
       connected: function() {
         console.log("connected", this.identifier)
       },
@@ -61,6 +61,9 @@ export class ActionCableService {
       },
       sendUid: function(data) {
         this.perform("set_facebook_id", {data: data})
+      },
+      sendRole: function(data) {
+        this.perform("set_role", {data: data})
       }
     });
 
@@ -93,6 +96,11 @@ export class ActionCableService {
   sendUid(uid) {
     /*this.broadcaster.broadcast("uid", uid)*/
     this.app.messagesChannel.sendUid(uid)
+  }
+
+  sendRole(role) {
+    /*this.broadcaster.broadcast("role", role)*/
+    this.app.messagesChannel.sendRole(role)
   }
 
   getHikerlist() {
