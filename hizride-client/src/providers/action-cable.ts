@@ -3,6 +3,8 @@ import 'rxjs/add/operator/map';
 import { User } from '@ionic/cloud-angular';
 
 import 'actioncable';
+import {Device} from "ionic-native";
+//import {UUID} from "angular2-uuid";
 
 //declare let ActionCable:any;
 
@@ -14,7 +16,6 @@ import 'actioncable';
 */
 @Injectable()
 export class ActionCableService {
-
 
   app:any = {};
   hikerlist = {};
@@ -47,15 +48,26 @@ export class ActionCableService {
       sendCurrentLocation: function(data) {
         this.perform("set_current_location", {data: data})
       },
+      login: function(user) {
+        this.perform("login", {user: user})
+      },
       sendUid: function(data) {
         this.perform("set_facebook_id", {data: data})
       },
+
 	  sendHikersToDriver: function() {
 		console.log("hikers to driver")
         this.perform("send_hikers_to_driver")
+
+      sendRole: function(data) {
+        this.perform("set_role", {data: data})
       }
     });
 
+  }
+
+  login(user) {
+    this.app.messagesChannel.login(user)
   }
 
   updateLocation(location) {
@@ -74,7 +86,7 @@ export class ActionCableService {
   sendCurrentLocation(coordinates) {
     /*this.broadcaster.broadcast("lat", lat)*/
 
-    var data = {lat:coordinates['lat'], lng:coordinates['lng']};
+    let data = {lat: coordinates['lat'], lng: coordinates['lng']};
     this.app.messagesChannel.sendCurrentLocation(data)
   }
 
@@ -91,4 +103,9 @@ export class ActionCableService {
 	console.log("getHikerlist");
     callback(this.hikerlist);
   }
+  sendRole(role) {
+    /*this.broadcaster.broadcast("role", role)*/
+    this.app.messagesChannel.sendRole(role)
+  }
+  
 }

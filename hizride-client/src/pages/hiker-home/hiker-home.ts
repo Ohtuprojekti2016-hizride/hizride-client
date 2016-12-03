@@ -34,9 +34,13 @@ export class HikerHomePage {
     this.platform.ready().then(() => {
       console.log("platform ready.");
       var directionsService = new google.maps.DirectionsService();
+      console.log("directions.")
       var directionsDisplay = new google.maps.DirectionsRenderer();
+      console.log("jejejej.")
 
-      Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
+      this.actionCable.sendRole("hiker");
+
+      Geolocation.getCurrentPosition().then((position) => {
 
         console.log("lets go");
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -70,7 +74,6 @@ export class HikerHomePage {
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
 
         let place = autocomplete.getPlace();
-        let geometry = place.geometry;
 
           var service = new google.maps.places.PlacesService(self.map);
           directionsDisplay.setMap(self.map);
@@ -95,7 +98,6 @@ export class HikerHomePage {
                 path:google.maps.geometry.encoding.decodePath(polyline)
               });
 
-              let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
               service.textSearch(request, function(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                   for (var i = 0; i < results.length; i++) {
@@ -131,7 +133,8 @@ export class HikerHomePage {
 
 
       }, (err) => {
-        console.log(err);
+        console.log(err.message);
+        console.log("hohohoho")
       });
     });
   }
