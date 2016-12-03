@@ -37,6 +37,8 @@ export class DriverHomePage {
 
 
 		this.platform.ready().then(() => {
+			self.actionCable.sendHikers();
+
 			var directionsService = new google.maps.DirectionsService();
 			var directionsDisplay = new google.maps.DirectionsRenderer();
 
@@ -128,18 +130,20 @@ export class DriverHomePage {
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
                 self.actionCable.sendRoute(polyline);
+
                 self.actionCable.getHikerlist(function(hikerlist){
                   console.log(hikerlist);
-                  for(var i = 0; i < hikerlist.length;i++){
-                    console.log(hikerlist[i]);
-                  }
+				  var obj = JSON.parse(hikerlist);
+
+				  for (let i in obj) { 
+					console.log(obj[i]);
+
+				    let ghost = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
+				    if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
+						alert("Huu!");
+					}
+				  }
                 });
-
-								let ghost = new google.maps.LatLng(60.203952, 24.972553); // Lontoonkadun haamu
-
-								if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
-									alert("Huu!");
-								}
 
 							}
 						});

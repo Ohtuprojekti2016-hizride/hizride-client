@@ -22,7 +22,8 @@ export class ActionCableService {
   constructor(
     public user: User
   ) {
-    this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
+	var self = this;
+    this.app.cable = ActionCable.createConsumer("ws://88.192.45.214:80/cable");
     this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "gdg"}, {
       connected: function() {
         console.log("connected", this.identifier)
@@ -35,8 +36,7 @@ export class ActionCableService {
       },
       received: function(data) {
         console.log("message received")
-        console.log(data['body'])
-        this.hikerlist = data['body']
+        self.hikerlist = data['body']
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
@@ -49,6 +49,10 @@ export class ActionCableService {
       },
       sendUid: function(data) {
         this.perform("set_facebook_id", {data: data})
+      },
+	  sendHikersToDriver: function() {
+		console.log("hikers to driver")
+        this.perform("send_hikers_to_driver")
       }
     });
 
@@ -79,10 +83,12 @@ export class ActionCableService {
     this.app.messagesChannel.sendUid(uid)
   }
 
-  getHikerlist(callback) {
-    console.log(this.hikerlist);
-    console.log("dgfd");
+  sendHikers() {
+	this.app.messagesChannel.sendHikersToDriver()
+  }
 
+  getHikerlist(callback) {
+	console.log("getHikerlist");
     callback(this.hikerlist);
   }
 }
