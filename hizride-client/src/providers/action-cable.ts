@@ -24,12 +24,10 @@ export class ActionCableService {
   constructor(
     public user: User
   ) {
-    //let uuid = Device.device.uuid
-    //if(!uuid){
-      //uuid = UUID.UUID()
-    //}
-    this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
+	var self = this;
+    this.app.cable = ActionCable.createConsumer("ws://88.192.45.214:80/cable");
     this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "uuid"}, {
+
       connected: function() {
         console.log("connected", this.identifier)
       },
@@ -41,11 +39,7 @@ export class ActionCableService {
       },
       received: function(data) {
         console.log("message received")
-        console.log(data['body'])
-        this.hikerlist = JSON.parse(data['body'])
-        for (let x of this.hikerlist) {
-          console.log(x)
-        }
+        self.hikerlist = data['body']
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
@@ -64,6 +58,10 @@ export class ActionCableService {
       },
       sendRole: function(data) {
         this.perform("set_role", {data: data})
+	  },
+	  sendHikersToDriver: function() {
+		console.log("hikers to driver")
+        this.perform("send_hikers_to_driver")
       }
     });
 
@@ -103,9 +101,12 @@ export class ActionCableService {
     this.app.messagesChannel.sendRole(role)
   }
 
-  getHikerlist() {
-    console.log(this.hikerlist);
-    console.log("dgfd");
-    return this.hikerlist;
+  sendHikers() {
+	this.app.messagesChannel.sendHikersToDriver()
+  }
+
+  getHikerlist(callback) {
+	console.log("getHikerlist");
+    callback(this.hikerlist);
   }
 }
