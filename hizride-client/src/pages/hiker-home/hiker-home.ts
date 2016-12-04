@@ -1,4 +1,6 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
+import {NavController} from "ionic-angular";
+import { ModeSelectPage } from '../mode-select/mode-select';
 import {Platform} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {ActionCableService} from "../../providers/action-cable";
@@ -18,7 +20,7 @@ export class HikerHomePage {
   toValue:string;
 
   busStops = [];
- constructor(public platform:Platform, public actionCable: ActionCableService) {
+ constructor(public platform:Platform, public navCtrl: NavController, public actionCable: ActionCableService) {
     console.log("constructor");
  	this.toValue = "";
     this.platform = platform;
@@ -172,5 +174,9 @@ export class HikerHomePage {
       infoWindow.open(this.map, marker);
     });
 
+  }
+
+  goBack() {
+  this.navCtrl.push(ModeSelectPage);
   }
 }

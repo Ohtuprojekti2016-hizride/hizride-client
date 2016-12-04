@@ -1,4 +1,6 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
+import {NavController} from "ionic-angular";
+import { ModeSelectPage } from '../mode-select/mode-select';
 import { User } from '@ionic/cloud-angular';
 import { Platform } from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
@@ -21,6 +23,7 @@ export class DriverHomePage {
 
 
   public constructor(public platform: Platform,
+  					 public navCtrl: NavController,
                      public alertCtrl: AlertController,
                      public user: User,
                      public actionCable: ActionCableService) {
@@ -213,6 +216,10 @@ showHikers(data) {
         ]
       });
       confirm.present();
+  }
+
+  goBack() {
+  this.navCtrl.push(ModeSelectPage);
   }
 
 }
