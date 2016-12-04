@@ -18,9 +18,9 @@ export class HikerHomePage {
   toValue:string;
 
   busStops = [];
- constructor(public platform:Platform, public actionCable: ActionCableService) {
+  constructor(public platform:Platform, public actionCable: ActionCableService) {
     console.log("constructor");
- 	this.toValue = "";
+ 	  this.toValue = "";
     this.platform = platform;
     this.loadMap();
   }
@@ -31,6 +31,7 @@ export class HikerHomePage {
 
   loadMap() {
     console.log("ladataan platform");
+
     this.platform.ready().then(() => {
       console.log("platform ready.");
       var directionsService = new google.maps.DirectionsService();
@@ -98,6 +99,8 @@ export class HikerHomePage {
                 path:google.maps.geometry.encoding.decodePath(polyline)
               });
 
+              self.actionCable.sendRoute(polyline);
+
               service.textSearch(request, function(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                   for (var i = 0; i < results.length; i++) {
@@ -162,7 +165,7 @@ export class HikerHomePage {
       });
     }
 
-  addInfoWindow(marker, content){
+  addInfoWindow(marker, content) {
 
     let infoWindow = new google.maps.InfoWindow({
       content: content
