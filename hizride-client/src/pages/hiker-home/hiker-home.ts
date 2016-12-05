@@ -160,8 +160,7 @@ export class HikerHomePage {
 
   }
   sendPosition(){
-    Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
-      //this.actionCable.updateLocation(position);
+    Geolocation.getCurrentPosition().then((position) => {
       // current location lähetetään backendiin
       var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
       this.actionCable.sendCurrentLocation(coordinates);
