@@ -20,7 +20,7 @@ export class HikerHomePage {
   toValue:string;
 
   busStops = [];
-  constructor(public platform:Platform, public actionCable: ActionCableService) {
+  constructor(public platform:Platform, public navCtrl: NavController, public actionCable: ActionCableService) {
 
     console.log("constructor");
  	  this.toValue = "";

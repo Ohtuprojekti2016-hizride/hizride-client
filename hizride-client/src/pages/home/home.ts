@@ -26,6 +26,7 @@ export class HomePage {
             this.auth.login('facebook').then(() => {
             console.log(this.user.social.facebook.data.full_name);
             this.actionCable.sendUid(this.user.social.facebook.uid);
+            console.log(this.user.social.facebook.uid);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
             console.log("error: " + error );
