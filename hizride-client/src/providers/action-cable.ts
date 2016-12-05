@@ -22,10 +22,14 @@ export class ActionCableService {
   hikerlist = {};
 
   constructor(
+    //let uuid = Device.device.uuid
+    //if(!uuid) {
+      //uuid = UUID.UUID()
+    //}
     public user: User
   ) {
 	var self = this;
-    this.app.cable = ActionCable.createConsumer("ws://88.192.45.214:80/cable");
+    this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
     this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "uuid"}, {
 
       connected: function() {
