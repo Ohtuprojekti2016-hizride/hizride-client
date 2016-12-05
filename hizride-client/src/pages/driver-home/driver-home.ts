@@ -87,31 +87,12 @@ export class DriverHomePage {
 					let geometry = place.geometry;
 					self.map.setCenter({ lat: -33.8688, lng: 151.2195 })
 
-					var bounds = new google.maps.LatLngBounds();
-
 					if ((geometry) !== undefined) {
 
 						console.log(place.name);
 						console.log(geometry.location.lng());
 						console.log(geometry.location.lat());
-
-						var icon = {
-							url: place.icon,
-							size: new google.maps.Size(71, 71),
-							origin: new google.maps.Point(0, 0),
-							anchor: new google.maps.Point(17, 34),
-							scaledSize: new google.maps.Size(25, 25)
-						};
-
-
-						let marker = new google.maps.Marker({
-							map: self.map,
-							icon: icon,
-							title: place.name,
-							animation: google.maps.Animation.DROP,
-							position: place.geometry.location,
-						});
-
+						
 						/*if (place.geometry.viewport) {
 						bounds.union(place.geometry.viewport);
 						} else {
@@ -163,7 +144,6 @@ export class DriverHomePage {
 	}
 
 showHikers(data) {
-  let hikers = data;
   console.log("hikers näkyy");
 }
 

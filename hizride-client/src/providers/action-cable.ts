@@ -3,7 +3,6 @@ import 'rxjs/add/operator/map';
 import { User } from '@ionic/cloud-angular';
 
 import 'actioncable';
-import {Device} from "ionic-native";
 //import {UUID} from "angular2-uuid";
 
 //declare let ActionCable:any;
