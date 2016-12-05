@@ -200,7 +200,7 @@ showHikers(data) {
     console.log(pic);
       let confirm = this.alertCtrl.create({
         title: 'Liftari lähellä!',
-        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + facejson + '<br><img src="' + pic + '" alt="profiilikuva">',
+        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + '<br><img src="' + pic + '" alt="profiilikuva">',
         buttons: [
           {
             text: 'Ei',
