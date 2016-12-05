@@ -26,31 +26,8 @@ export class HomePage {
             this.auth.login('facebook').then(() => {
             console.log(this.user.social.facebook.data.full_name);
             this.actionCable.sendUid(this.user.social.facebook.uid);
+        //    this.actionCable.sendName(this.user.social.facebook.data.full_name);
             console.log(this.user.social.facebook.uid);
-            this.navCtrl.push(ModeSelectPage);
-            }, (error) => {
-            console.log("error: " + error );
-            });
-        });
-    }
-
-  public login2() {
-
-        this.platform.ready().then(() => {
-            this.auth.login('linkedin').then(() => {
-            console.log(this.user.social.linkedin.uid);
-            this.navCtrl.push(ModeSelectPage);
-            }, (error) => {
-            console.log("error: " + error );
-            });
-        });
-    }
-
-  public login3() {
-
-        this.platform.ready().then(() => {
-            this.auth.login('github').then(() => {
-            console.log(this.user.social.github.uid);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
             console.log("error: " + error );

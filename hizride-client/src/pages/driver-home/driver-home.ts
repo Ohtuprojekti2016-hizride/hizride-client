@@ -7,6 +7,7 @@ import {Geolocation} from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 import {ActionCableService} from "../../providers/action-cable";
 
+
 declare var google;
 
 
@@ -87,12 +88,31 @@ export class DriverHomePage {
 					let geometry = place.geometry;
 					self.map.setCenter({ lat: -33.8688, lng: 151.2195 })
 
+					var bounds = new google.maps.LatLngBounds();
+
 					if ((geometry) !== undefined) {
 
 						console.log(place.name);
 						console.log(geometry.location.lng());
 						console.log(geometry.location.lat());
-						
+
+						var icon = {
+							url: place.icon,
+							size: new google.maps.Size(71, 71),
+							origin: new google.maps.Point(0, 0),
+							anchor: new google.maps.Point(17, 34),
+							scaledSize: new google.maps.Size(25, 25)
+						};
+
+
+						let marker = new google.maps.Marker({
+							map: self.map,
+							icon: icon,
+							title: place.name,
+							animation: google.maps.Animation.DROP,
+							position: place.geometry.location,
+						});
+
 						/*if (place.geometry.viewport) {
 						bounds.union(place.geometry.viewport);
 						} else {
@@ -144,6 +164,7 @@ export class DriverHomePage {
 	}
 
 showHikers(data) {
+  let hikers = data;
   console.log("hikers näkyy");
 }
 
@@ -175,13 +196,11 @@ showHikers(data) {
 
 
   showConfirm(fb_id) {
-   // var name = this.user.social.facebook.data.full_name;
     var pic = "https://graph.facebook.com/"+fb_id+"/picture?type=square";
     console.log(pic);
-    //console.log(this.user.social.facebook.uid);
       let confirm = this.alertCtrl.create({
         title: 'Liftari lähellä!',
-        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + '<br><img src="' + pic + '" alt="profiilikuva">',
+        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + facejson + '<br><img src="' + pic + '" alt="profiilikuva">',
         buttons: [
           {
             text: 'Ei',

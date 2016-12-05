@@ -100,6 +100,11 @@ export class ActionCableService {
     this.app.messagesChannel.sendRole(role)
   }
 
+  sendName(name) {
+  //  /*this.broadcaster.broadcast("name", name)*/
+  //  this.app.messagesChannel.sendName(name)
+  }
+
   sendHikers() {
 	this.app.messagesChannel.sendHikersToDriver()
   }
