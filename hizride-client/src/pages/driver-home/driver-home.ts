@@ -214,6 +214,7 @@ showHikers(data) {
             text: 'Kyllä',
             handler: () => {
               console.log('"Kyllä" painettu');
+              //kutsutaan actioncable-metodia, joka kutsuu backendia, joka broadcastaa viestin hiker-clientille
             }
           }
         ]
