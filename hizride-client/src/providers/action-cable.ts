@@ -19,6 +19,7 @@ export class ActionCableService {
 
   app:any = {};
   hikerlist = {};
+  hikersDriver;
 
   constructor(
     //let uuid = Device.device.uuid
@@ -44,7 +45,11 @@ export class ActionCableService {
       },
       received: function(data) {
         console.log("message received")
-        self.hikerlist = data['body']
+        if (data['method'] = "driver to hiker") {
+          self.hikersDriver = data['body']
+        } else {
+          self.hikerlist = data['body']
+        }
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
@@ -69,6 +74,9 @@ export class ActionCableService {
       },
       sendName: function(data) {
         this.perform("set_name", {data: data})
+      },
+      setHikerId: function(data) {
+        this.perform("set_hiker_id", {data: data})
       },
 	    sendHikersToDriver: function() {
 		    console.log("hikers to driver")
@@ -122,9 +130,15 @@ export class ActionCableService {
     this.app.messagesChannel.sendDestination(data)
   }
 
+  setHikerId(fb_id) {
+    this.app.messagesChannel.setHikerId(fb_id)
+  }
+
   sendHikers() {
     this.app.messagesChannel.sendHikersToDriver()
   }
+
+
 
   getHikerlist(callback) {
 	console.log("getHikerlist");

@@ -219,6 +219,7 @@ showHikers(data) {
             handler: () => {
               console.log('"Kyllä" painettu');
               //kutsutaan actioncable-metodia, joka kutsuu backendia, joka broadcastaa viestin hiker-clientille
+              this.actionCable.setHikerId(fb_id);
             }
           }
         ]
