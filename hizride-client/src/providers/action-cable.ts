@@ -65,6 +65,9 @@ export class ActionCableService {
       sendDestination: function(data) {
         this.perform("set_destination", {data: data})
       },
+      sendName: function(data) {
+        this.perform("set_name", {data: data})
+      },
 	    sendHikersToDriver: function() {
 		    console.log("hikers to driver")
         this.perform("send_hikers_to_driver")
@@ -108,8 +111,8 @@ export class ActionCableService {
   }
 
   sendName(name) {
-  //  /*this.broadcaster.broadcast("name", name)*/
-  //  this.app.messagesChannel.sendName(name)
+    /*this.broadcaster.broadcast("name", name)*/
+    this.app.messagesChannel.sendName(name)
 
   sendDestination(coordinates) {
     let data = {lat: coordinates['lat'], lng: coordinates['lng']}
