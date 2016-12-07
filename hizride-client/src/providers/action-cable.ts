@@ -62,9 +62,12 @@ export class ActionCableService {
       },
       sendRole: function(data) {
         this.perform("set_role", {data: data})
-	  },
-	  sendHikersToDriver: function() {
-		console.log("hikers to driver")
+	    },
+      sendDestination: function(data) {
+        this.perform("set_destination", {data: data})
+      },
+	    sendHikersToDriver: function() {
+		    console.log("hikers to driver")
         this.perform("send_hikers_to_driver")
       }
     });
@@ -105,8 +108,13 @@ export class ActionCableService {
     this.app.messagesChannel.sendRole(role)
   }
 
+  sendDestination(coordinates) {
+    let data = {lat: coordinates['lat'], lng: coordinates['lng']}
+    this.app.messagesChannel.sendDestination(data)
+  }
+
   sendHikers() {
-	this.app.messagesChannel.sendHikersToDriver()
+    this.app.messagesChannel.sendHikersToDriver()
   }
 
   getHikerlist(callback) {

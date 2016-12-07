@@ -78,6 +78,9 @@ export class HikerHomePage {
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
 
         let place = autocomplete.getPlace();
+        let geometry = place.geometry;
+
+        self.actionCable.sendDestination({"lat":geometry.location.lat(), "lng":geometry.location.lng()});
 
           var service = new google.maps.places.PlacesService(self.map);
           directionsDisplay.setMap(self.map);
@@ -101,8 +104,6 @@ export class HikerHomePage {
               let newPolyline = new google.maps.Polyline({
                 path:google.maps.geometry.encoding.decodePath(polyline)
               });
-
-              self.actionCable.sendRoute(polyline);
 
               service.textSearch(request, function(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {

@@ -138,7 +138,7 @@ export class DriverHomePage {
                   console.log(hikerlist);
 				  var obj = JSON.parse(hikerlist);
 
-				  for (let i in obj) { 
+				  for (let i in obj) {
 					console.log(obj[i]);
 
 				    let ghost = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
@@ -213,6 +213,7 @@ showHikers(data) {
             text: 'Kyllä',
             handler: () => {
               console.log('"Kyllä" painettu');
+              //kutsutaan actioncable-metodia, joka kutsuu backendia, joka broadcastaa viestin hiker-clientille
             }
           }
         ]
