@@ -90,6 +90,7 @@ export class DriverHomePage {
 
 					var bounds = new google.maps.LatLngBounds();
 
+            let markersArray = [];
 					if ((geometry) !== undefined) {
 
 						console.log(place.name);
@@ -105,14 +106,8 @@ export class DriverHomePage {
 						};
 
 
-						let marker = new google.maps.Marker({
-							map: self.map,
-							icon: icon,
-							title: place.name,
-							animation: google.maps.Animation.DROP,
-							position: place.geometry.location,
-						});
 
+            self.clearOverlays(markersArray);
 						/*if (place.geometry.viewport) {
 						bounds.union(place.geometry.viewport);
 						} else {
@@ -145,9 +140,9 @@ export class DriverHomePage {
 				    let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
 				    if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0001)) {
 				    	var fb_id = obj[i].facebook_id;
-              self.addMarker(hikerPos);
+              self.addMarker(hikerPos,markersArray);
               let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
-              self.addMarker(hikerDest);
+              self.addMarker(hikerDest,markersArray);
 				    	self.showConfirm(fb_id);
 					}
 				  }
@@ -170,8 +165,13 @@ showHikers(data) {
   let hikers = data;
   console.log("hikers näkyy");
 }
-
-  addMarker(pos){
+  clearOverlays(markersArray) {
+  for (var i = 0; i < markersArray.length; i++ ) {
+    markersArray[i].setMap(null);
+  }
+  markersArray.length = 0;
+}
+  addMarker(pos, markersArray){
 
     let marker = new google.maps.Marker({
       map: this.map,
@@ -179,6 +179,7 @@ showHikers(data) {
       position: pos,
       title: "HitchHiker!"
     });
+    markersArray.push(marker);
 
     let content = "<h4>HitchHiker!</h4>";
 
