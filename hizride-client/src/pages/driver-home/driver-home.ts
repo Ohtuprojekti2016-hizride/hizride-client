@@ -7,6 +7,7 @@ import {Geolocation} from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 import {ActionCableService} from "../../providers/action-cable";
 
+
 declare var google;
 
 
@@ -138,12 +139,13 @@ export class DriverHomePage {
                   console.log(hikerlist);
 				  var obj = JSON.parse(hikerlist);
 
-				  for (let i in obj) { 
+				  for (let i in obj) {
 					console.log(obj[i]);
 
 				    let ghost = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
 				    if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
 				    	var fb_id = obj[i].facebook_id;
+              self.addMarker(ghost);
 				    	self.showConfirm(fb_id);
 					}
 				  }
@@ -167,15 +169,16 @@ showHikers(data) {
   console.log("hikers näkyy");
 }
 
-  addMarker(){
+  addMarker(pos){
 
     let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: this.map.getCenter()
+      position: pos,
+      title: "HitchHiker!"
     });
 
-    let content = "<h4>Information!</h4>";
+    let content = "<h4>HitchHiker!</h4>";
 
     this.addInfoWindow(marker, content);
 
@@ -195,10 +198,8 @@ showHikers(data) {
 
 
   showConfirm(fb_id) {
-   // var name = this.user.social.facebook.data.full_name;
     var pic = "https://graph.facebook.com/"+fb_id+"/picture?type=square";
     console.log(pic);
-    //console.log(this.user.social.facebook.uid);
       let confirm = this.alertCtrl.create({
         title: 'Liftari lähellä!',
         message: 'Haluatko ottaa tämän henkilön kyytiin? ' + '<br><img src="' + pic + '" alt="profiilikuva">',
