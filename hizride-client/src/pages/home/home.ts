@@ -17,7 +17,13 @@ export class HomePage {
                        public auth: Auth,
                        public actionCable:ActionCableService) {
       this.platform = platform;
+
+
     }
+      //if (this.auth.isAuthenticated()) {
+    //this.navCtrl.push(ModeSelectPage);
+    //}
+    
 
     public login() {
 

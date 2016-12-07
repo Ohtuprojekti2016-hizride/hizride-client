@@ -3,7 +3,9 @@ import {NavController} from "ionic-angular";
 import { ModeSelectPage } from '../mode-select/mode-select';
 import {Platform} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
+import { AlertController } from 'ionic-angular';
 import {ActionCableService} from "../../providers/action-cable";
+import { LoadingController } from 'ionic-angular';
 
 declare var google;
 
@@ -20,7 +22,7 @@ export class HikerHomePage {
   toValue:string;
 
   busStops = [];
-  constructor(public platform:Platform, public navCtrl: NavController, public actionCable: ActionCableService) {
+  constructor(public platform:Platform, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public navCtrl: NavController, public actionCable: ActionCableService) {
 
     console.log("constructor");
  	  this.toValue = "";
@@ -166,7 +168,26 @@ export class HikerHomePage {
       var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
       this.actionCable.sendCurrentLocation(coordinates);
       });
+
     }
+
+    presentLoading() {
+  let loader = this.loadingCtrl.create({
+    content: "Searching for drivers...",
+  //  duration: 3000
+  });
+  loader.present();
+
+  if(1<2) {
+    loader.dismiss();
+  }
+}
+
+
+  readyForPickup() {
+  this.sendPosition();
+  this.presentLoading();
+  }
 
   addInfoWindow(marker, content) {
 
