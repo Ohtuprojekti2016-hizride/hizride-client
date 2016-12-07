@@ -45,11 +45,10 @@ export class ActionCableService {
       },
       received: function(data) {
         console.log("message received")
-        if (data['method'] = "driver to hiker") {
+        if (data['method'] == "driver to hiker") {
           self.hikersDriver = data['body']
-        } else {
-          self.hikerlist = data['body']
         }
+          self.hikerlist = data['body']
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
@@ -76,7 +75,10 @@ export class ActionCableService {
         this.perform("set_name", {data: data})
       },
       setHikerId: function(data) {
-        this.perform("set_hiker_id", {data: data})
+        this.perform("set_hiker_id", {fb_id: data})
+      },
+      findDriver: function() {
+        this.perform("find_a_driver")
       },
 	    sendHikersToDriver: function() {
 		    console.log("hikers to driver")
@@ -136,6 +138,10 @@ export class ActionCableService {
 
   sendHikers() {
     this.app.messagesChannel.sendHikersToDriver()
+  }
+
+  findDriver() {
+  this.app.messagesChannel.findDriver()
   }
 
 

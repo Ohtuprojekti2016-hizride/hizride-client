@@ -1,0 +1,16 @@
+ presentLoading() {
+  let loader = this.loadingCtrl.create({
+    content: "Searching for drivers...",
+  });
+  loader.present();
+
+  if(1<2) {
+    loader.dismiss();
+  }
+}
+
+
+  readyForPickup() {
+  this.sendPosition();
+  this.presentLoading();
+  }
