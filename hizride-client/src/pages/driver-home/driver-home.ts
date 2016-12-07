@@ -148,7 +148,7 @@ export class DriverHomePage {
               self.addMarker(hikerPos);
               let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
               self.addMarker(hikerDest);
-				    	self.showConfirm(fb_id);
+				    	self.showConfirm(fb_id, obj[i].destination_name);
 					}
 				  }
                 });
@@ -199,12 +199,12 @@ showHikers(data) {
   }
 
 
-  showConfirm(fb_id) {
+  showConfirm(fb_id, destination_name) {
     var pic = "https://graph.facebook.com/"+fb_id+"/picture?type=square";
     console.log(pic);
       let confirm = this.alertCtrl.create({
         title: 'Liftari lähellä!',
-        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + '<br><img src="' + pic + '" alt="profiilikuva">',
+        message: 'Haluatko ottaa tämän henkilön kyytiin? Hän on matkalla kohteeseen ' + destination_name + '<br><img src="' + pic + '" alt="profiilikuva">',
         buttons: [
           {
             text: 'Ei',
