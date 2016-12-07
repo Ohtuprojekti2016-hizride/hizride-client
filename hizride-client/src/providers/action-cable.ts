@@ -113,6 +113,7 @@ export class ActionCableService {
   sendName(name) {
     /*this.broadcaster.broadcast("name", name)*/
     this.app.messagesChannel.sendName(name)
+  }
 
   sendDestination(coordinates) {
     let data = {lat: coordinates['lat'], lng: coordinates['lng']}
