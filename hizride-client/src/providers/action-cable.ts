@@ -21,10 +21,16 @@ export class ActionCableService {
   hikerlist = {};
 
   constructor(
+    //let uuid = Device.device.uuid
+    //if(!uuid) {
+      //uuid = UUID.UUID()
+    //}
     public user: User
   ) {
 	var self = this;
-    this.app.cable = ActionCable.createConsumer("ws://88.192.45.214:80/cable");
+    // topin serveri:
+    // this.app.cable = ActionCable.createConsumer("ws://88.192.45.214:80/cable");
+    this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
     this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "uuid"}, {
 
       connected: function() {
@@ -57,9 +63,15 @@ export class ActionCableService {
       },
       sendRole: function(data) {
         this.perform("set_role", {data: data})
-	  },
-	  sendHikersToDriver: function() {
-		console.log("hikers to driver")
+	    },
+      sendDestination: function(data) {
+        this.perform("set_destination", {data: data})
+      },
+      sendName: function(data) {
+        this.perform("set_name", {data: data})
+      },
+	    sendHikersToDriver: function() {
+		    console.log("hikers to driver")
         this.perform("send_hikers_to_driver")
       }
     });
@@ -101,12 +113,17 @@ export class ActionCableService {
   }
 
   sendName(name) {
-  //  /*this.broadcaster.broadcast("name", name)*/
-  //  this.app.messagesChannel.sendName(name)
+    /*this.broadcaster.broadcast("name", name)*/
+    this.app.messagesChannel.sendName(name)
+  }
+
+  sendDestination(place) {
+    let data = {name: place['name'], lat: place['lat'], lng: place['lng']}
+    this.app.messagesChannel.sendDestination(data)
   }
 
   sendHikers() {
-	this.app.messagesChannel.sendHikersToDriver()
+    this.app.messagesChannel.sendHikersToDriver()
   }
 
   getHikerlist(callback) {

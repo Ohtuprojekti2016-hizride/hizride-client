@@ -2,12 +2,12 @@
   <ion-toolbar>
   <ion-buttons left>
     <button ion-button (click)="goBack()"><ion-icon name="md-arrow-back"></ion-icon></button>
-  </ion-buttons>  
+  </ion-buttons>
     <ion-buttons end>
       <button (click)="readyForPickup()"  ion-button><ion-icon name="add"></ion-icon>Ready for pickup</button>
     </ion-buttons>
   </ion-toolbar>
-  <input id="journey_to" name="journey_to" type="text" placeholder="Enter location"[(ngModel)]="toValue">
+  <input id="journey_to" name="journey_to" type="text" placeholder="Enter destination"[(ngModel)]="toValue">
 </ion-header>
 
 <ion-content>

@@ -90,6 +90,7 @@ export class DriverHomePage {
 
 					var bounds = new google.maps.LatLngBounds();
 
+            let markersArray = [];
 					if ((geometry) !== undefined) {
 
 						console.log(place.name);
@@ -105,14 +106,8 @@ export class DriverHomePage {
 						};
 
 
-						let marker = new google.maps.Marker({
-							map: self.map,
-							icon: icon,
-							title: place.name,
-							animation: google.maps.Animation.DROP,
-							position: place.geometry.location,
-						});
 
+            self.clearOverlays(markersArray);
 						/*if (place.geometry.viewport) {
 						bounds.union(place.geometry.viewport);
 						} else {
@@ -139,13 +134,17 @@ export class DriverHomePage {
                   console.log(hikerlist);
 				  var obj = JSON.parse(hikerlist);
 
-				  for (let i in obj) { 
+				  for (let i in obj) {
 					console.log(obj[i]);
 
-				    let ghost = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
-				    if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
+				    let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
+				    if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0001)) {
 				    	var fb_id = obj[i].facebook_id;
-				    	self.showConfirm(fb_id);
+              self.addMarker(hikerPos,markersArray);
+              let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
+
+              self.addMarker(hikerDest,markersArray);
+				    	self.showConfirm(fb_id, obj[i].destination_name);
 					}
 				  }
                 });
@@ -167,16 +166,23 @@ showHikers(data) {
   let hikers = data;
   console.log("hikers näkyy");
 }
-
-  addMarker(){
+  clearOverlays(markersArray) {
+  for (var i = 0; i < markersArray.length; i++ ) {
+    markersArray[i].setMap(null);
+  }
+  markersArray.length = 0;
+}
+  addMarker(pos, markersArray){
 
     let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: this.map.getCenter()
+      position: pos,
+      title: "HitchHiker!"
     });
+    markersArray.push(marker);
 
-    let content = "<h4>Information!</h4>";
+    let content = "<h4>HitchHiker!</h4>";
 
     this.addInfoWindow(marker, content);
 
@@ -195,12 +201,12 @@ showHikers(data) {
   }
 
 
-  showConfirm(fb_id) {
+  showConfirm(fb_id, destination_name) {
     var pic = "https://graph.facebook.com/"+fb_id+"/picture?type=square";
     console.log(pic);
       let confirm = this.alertCtrl.create({
         title: 'Liftari lähellä!',
-        message: 'Haluatko ottaa tämän henkilön kyytiin? ' + '<br><img src="' + pic + '" alt="profiilikuva">',
+        message: 'Haluatko ottaa tämän henkilön kyytiin? Hän on matkalla kohteeseen ' + destination_name + '<br><img src="' + pic + '" alt="profiilikuva">',
         buttons: [
           {
             text: 'Ei',
@@ -212,6 +218,7 @@ showHikers(data) {
             text: 'Kyllä',
             handler: () => {
               console.log('"Kyllä" painettu');
+              //kutsutaan actioncable-metodia, joka kutsuu backendia, joka broadcastaa viestin hiker-clientille
             }
           }
         ]

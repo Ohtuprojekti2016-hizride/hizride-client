@@ -80,6 +80,9 @@ export class HikerHomePage {
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
 
         let place = autocomplete.getPlace();
+        let geometry = place.geometry;
+
+        self.actionCable.sendDestination({"name":place, "lat":geometry.location.lat(), "lng":geometry.location.lng()});
 
           var service = new google.maps.places.PlacesService(self.map);
           directionsDisplay.setMap(self.map);
@@ -103,8 +106,6 @@ export class HikerHomePage {
               let newPolyline = new google.maps.Polyline({
                 path:google.maps.geometry.encoding.decodePath(polyline)
               });
-
-              self.actionCable.sendRoute(polyline);
 
               service.textSearch(request, function(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -162,8 +163,7 @@ export class HikerHomePage {
 
   }
   sendPosition(){
-    Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
-      //this.actionCable.updateLocation(position);
+    Geolocation.getCurrentPosition().then((position) => {
       // current location lähetetään backendiin
       var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
       this.actionCable.sendCurrentLocation(coordinates);
