@@ -142,10 +142,12 @@ export class DriverHomePage {
 				  for (let i in obj) {
 					console.log(obj[i]);
 
-				    let ghost = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
-				    if (google.maps.geometry.poly.isLocationOnEdge(ghost, newPolyline, 0.0001)) {
+				    let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
+				    if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0001)) {
 				    	var fb_id = obj[i].facebook_id;
-              self.addMarker(ghost);
+              self.addMarker(hikerPos);
+              let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
+              self.addMarker(hikerDest);
 				    	self.showConfirm(fb_id);
 					}
 				  }
