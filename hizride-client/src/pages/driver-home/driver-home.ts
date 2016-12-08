@@ -227,6 +227,7 @@ showHikers(data) {
       confirm.present();
   }
 
+
   goBack() {
   this.navCtrl.push(ModeSelectPage);
   }
