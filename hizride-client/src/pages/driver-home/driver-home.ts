@@ -128,39 +128,39 @@ export class DriverHomePage {
 								let newPolyline = new google.maps.Polyline({
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
-                self.actionCable.sendRoute(polyline);
+              self.actionCable.sendRoute(polyline);
 
-                self.actionCable.getHikerlist(function(hikerlist){
-                  console.log(hikerlist);
-				          var obj = JSON.parse(hikerlist);
+              self.actionCable.getHikerlist(function(hikerlist){
+                console.log(hikerlist);
+				        var obj = JSON.parse(hikerlist);
 
-				          for (let i in obj) {
-					          console.log(obj[i]);
+				        for (let i in obj) {
+					        console.log(obj[i]);
 
-				            let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
-				            if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0001)) {
-				    	        var fb_id = obj[i].facebook_id;
-                      self.addMarker(hikerPos,markersArray);
-                      let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
+				          let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
+				          if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0002)) {
+				    	      var fb_id = obj[i].facebook_id;
+                    self.addMarker(hikerPos,markersArray);
+                    let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
 
-                      self.addMarker(hikerDest,markersArray);
-				    	        self.showConfirm(fb_id, obj[i].destination_name);
-					          }
-				          }
-                });
+                    self.addMarker(hikerDest,markersArray);
+				    	      self.showConfirm(fb_id, obj[i].destination_name);
+					        }
+				        }
+              });
 
-							}
-						});
+						}
+					});
 
-						//self.map.fitBounds(bounds);
-					}
-				});
-
-			}, (err) => {
-				console.log(err);
+					//self.map.fitBounds(bounds);
+				}
 			});
+
+		}, (err) => {
+			console.log(err);
 		});
-	}
+	});
+}
 
 showHikers(data) {
   let hikers = data;
@@ -181,6 +181,7 @@ clearOverlays(markersArray) {
       position: pos,
       title: "HitchHiker!"
     });
+
     markersArray.push(marker);
 
     let content = "<h4>HitchHiker!</h4>";
@@ -229,7 +230,7 @@ clearOverlays(markersArray) {
   }
 
   goBack() {
-  this.navCtrl.push(ModeSelectPage);
+    this.navCtrl.push(ModeSelectPage);
   }
 
 }
