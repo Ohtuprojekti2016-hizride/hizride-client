@@ -160,12 +160,18 @@ export class HikerHomePage {
     this.addInfoWindow(marker, content);
 
   }
-  sendPosition(){q
+  sendPosition(){
     Geolocation.getCurrentPosition().then((position) => {
       // current location lähetetään backendiin
       var coordinates = {"lat":position.coords.latitude, "lng":position.coords.longitude};
       this.actionCable.sendCurrentLocation(coordinates);
       });
+    }
+
+
+    readyForPickup(){
+    this.sendPosition();
+    this.checkIfAnyDrivers();
     }
 
   addInfoWindow(marker, content) {
