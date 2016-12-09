@@ -39,7 +39,6 @@ export class DriverHomePage {
 	loadMap() {
     var self = this;
 
-
 		this.platform.ready().then(() => {
 			self.actionCable.sendHikers();
 
@@ -90,8 +89,9 @@ export class DriverHomePage {
 
 					var bounds = new google.maps.LatLngBounds();
 
-            let markersArray = [];
-					if ((geometry) !== undefined) {
+          let markersArray = [];
+
+          if ((geometry) !== undefined) {
 
 						console.log(place.name);
 						console.log(geometry.location.lng());
@@ -132,21 +132,21 @@ export class DriverHomePage {
 
                 self.actionCable.getHikerlist(function(hikerlist){
                   console.log(hikerlist);
-				  var obj = JSON.parse(hikerlist);
+				          var obj = JSON.parse(hikerlist);
 
-				  for (let i in obj) {
-					console.log(obj[i]);
+				          for (let i in obj) {
+					          console.log(obj[i]);
 
-				    let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
-				    if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0001)) {
-				    	var fb_id = obj[i].facebook_id;
-              self.addMarker(hikerPos,markersArray);
-              let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
+				            let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
+				            if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0001)) {
+				    	        var fb_id = obj[i].facebook_id;
+                      self.addMarker(hikerPos,markersArray);
+                      let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
 
-              self.addMarker(hikerDest,markersArray);
-				    	self.showConfirm(fb_id, obj[i].destination_name);
-					}
-				  }
+                      self.addMarker(hikerDest,markersArray);
+				    	        self.showConfirm(fb_id, obj[i].destination_name);
+					          }
+				          }
                 });
 
 							}
@@ -166,7 +166,8 @@ showHikers(data) {
   let hikers = data;
   console.log("hikers näkyy");
 }
-  clearOverlays(markersArray) {
+
+clearOverlays(markersArray) {
   for (var i = 0; i < markersArray.length; i++ ) {
     markersArray[i].setMap(null);
   }
@@ -219,6 +220,7 @@ showHikers(data) {
             handler: () => {
               console.log('"Kyllä" painettu');
               //kutsutaan actioncable-metodia, joka kutsuu backendia, joka broadcastaa viestin hiker-clientille
+              this.actionCable.setHikerId(fb_id);
             }
           }
         ]

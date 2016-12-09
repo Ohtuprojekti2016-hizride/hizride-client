@@ -9,34 +9,29 @@ import {ActionCableService} from "../../providers/action-cable";
     templateUrl: 'home.html',
 })
 export class HomePage {
-
-
     public constructor(public navCtrl: NavController,
                        public platform: Platform,
                        public user: User,
                        public auth: Auth,
                        public actionCable:ActionCableService) {
       this.platform = platform;
-
-
     }
-      //if (this.auth.isAuthenticated()) {
+
+    //if (this.auth.isAuthenticated()) {
     //this.navCtrl.push(ModeSelectPage);
     //}
-    
+
 
     public login() {
-
-
         this.platform.ready().then(() => {
             this.auth.login('facebook').then(() => {
-            console.log(this.user.social.facebook.data.full_name);
-            this.actionCable.sendUid(this.user.social.facebook.uid);
-            this.actionCable.sendName(this.user.social.facebook.data.full_name);
-            console.log(this.user.social.facebook.uid);
-            this.navCtrl.push(ModeSelectPage);
+              console.log(this.user.social.facebook.data.full_name);
+              this.actionCable.sendUid(this.user.social.facebook.uid);
+              this.actionCable.sendName(this.user.social.facebook.data.full_name);
+              console.log(this.user.social.facebook.uid);
+              this.navCtrl.push(ModeSelectPage);
             }, (error) => {
-            console.log("error: " + error );
+              console.log("error: " + error );
             });
         });
     }
@@ -46,6 +41,4 @@ export class HomePage {
     this.actionCable.sendUid("kirjautumaton");
     this.navCtrl.push(ModeSelectPage);
   }
-
-
 }
