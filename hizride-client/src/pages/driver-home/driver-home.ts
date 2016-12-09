@@ -138,7 +138,7 @@ export class DriverHomePage {
 					console.log(obj[i]);
 
 				    let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
-				    if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0001)) {
+				    if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0002)) {
 				    	var fb_id = obj[i].facebook_id;
               self.addMarker(hikerPos,markersArray);
               let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
