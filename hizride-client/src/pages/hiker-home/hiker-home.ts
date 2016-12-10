@@ -74,7 +74,7 @@ export class HikerHomePage {
         let place = autocomplete.getPlace();
         let geometry = place.geometry;
 
-        self.actionCable.sendDestination({"name":place, "lat":geometry.location.lat(), "lng":geometry.location.lng()});
+        self.actionCable.sendDestination({"name":place.name, "lat":geometry.location.lat(), "lng":geometry.location.lng()});
 
         var service = new google.maps.places.PlacesService(self.map);
         directionsDisplay.setMap(self.map);
