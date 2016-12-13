@@ -34,7 +34,7 @@ export class HikerHomePage {
 
   loadMap() {
     console.log("ladataan platform");
-
+    //Varmistetaan alustan valmiustila ennen googlen ominaisuuksien kutsumista.
     this.platform.ready().then(() => {
       var directionsService = new google.maps.DirectionsService();
       var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -42,6 +42,7 @@ export class HikerHomePage {
       this.actionCable.sendRole("hiker");
 
       Geolocation.getCurrentPosition().then((position) => {
+        //Käyttäjän nykyinen positio
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         let mapOptions = {
@@ -74,11 +75,14 @@ export class HikerHomePage {
         let place = autocomplete.getPlace();
         let geometry = place.geometry;
 
+        //Lähetetään kohde backendiin
         self.actionCable.sendDestination({"name":place.name, "lat":geometry.location.lat(), "lng":geometry.location.lng()});
 
         var service = new google.maps.places.PlacesService(self.map);
         directionsDisplay.setMap(self.map);
 
+
+        //Googleen lähetettävä bussipysäkkien haku
         var request = {
           query: "bus station",
           location: latLng,
@@ -86,20 +90,25 @@ export class HikerHomePage {
           //types: ['restaurant']
         };
 
+        //Googlelta kysyttävä reittihaku
         var routerequest = {
           origin: latLng,
           destination: place.geometry.location,
           travelMode: 'DRIVING'
         };
-
+        //Reittihaku
         directionsService.route(routerequest, function(result, status) {
           if (status == 'OK') {
+
+            //Piirretään reitti karttaan
             directionsDisplay.setDirections(result);
+
+            //Tehdään reitistä backendiin lähetettävä muoto
             let polyline = result.routes["0"].overview_polyline;
             let newPolyline = new google.maps.Polyline({
               path:google.maps.geometry.encoding.decodePath(polyline)
             });
-
+            //Haetaan lähimmät bussipysäkit
             service.textSearch(request, function(results,status){
               if (status == google.maps.places.PlacesServiceStatus.OK) {
                 for (var i = 0; i < results.length; i++) {
@@ -107,6 +116,7 @@ export class HikerHomePage {
                   self.busStops.push(results[i]);
                 }
 
+                //Merkitään karttaan vain reitinvarrella sijaitsevat bussipysäkit
                 for(let i =0;i<self.busStops.length;i++) {
                   if (google.maps.geometry.poly.isLocationOnEdge(self.busStops[i].geometry.location, newPolyline, 0.0005)) {
                     console.log("tämä pysäkki käy: " + self.busStops[i].geometry.location);
