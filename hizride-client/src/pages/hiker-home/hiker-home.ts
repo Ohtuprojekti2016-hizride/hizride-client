@@ -168,13 +168,26 @@ export class HikerHomePage {
   presentLoading() {
     let loader = this.loadingCtrl.create({
       content: "Searching for drivers...",
-      //  duration: 3000
+      duration: 3000
     });
     loader.present();
-
-    if(1<2) {
+	
+	/*if(1<2) {
       loader.dismiss();
-    }
+    }*/
+	
+	/*let confirm = this.alertCtrl.create({
+        title: 'Sijainti lähetetty. Odotetaan kyytiä.',
+        buttons: [
+          {
+            text: 'OK',
+            handler: () => {
+              console.log('"OK" painettu');
+            }
+          }
+		]
+	});
+	confirm.present();*/
   }
 
 
