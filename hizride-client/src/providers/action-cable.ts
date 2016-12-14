@@ -29,9 +29,9 @@ export class ActionCableService {
   ) {
 	var self = this;
     // topin serveri:
-    this.app.cable = ActionCable.createConsumer("ws://88.192.45.214:80/cable");
-    //this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
-    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel", user: "uuid"}, {
+    //this.app.cable = ActionCable.createConsumer("ws://88.192.45.214:80/cable");
+    this.app.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
+    this.app.messagesChannel = this.app.cable.subscriptions.create({channel: "MessageChannel"}, {
 
       connected: function() {
         console.log("connected", this.identifier)
@@ -43,8 +43,24 @@ export class ActionCableService {
         console.log("rejected")
       },
       received: function(data) {
-        console.log("message received")
-        self.hikerlist = data['body']
+        console.log("message received");
+        switch(data['type'])
+        {
+          case 'hikerlist':
+            self.hikerlist = data['body'];
+            break;
+          case 'from_driver':
+            // What to do when hiker receives ack from driver?
+            break;
+          case 'from_hiker':
+            // What to do when driver receives ack from hiker?
+            break;
+          default:
+            console.log(data);
+            break;
+
+        }
+
       },
       sendMessage: function(data) {
         this.perform("message", {data: data})
@@ -73,6 +89,18 @@ export class ActionCableService {
 	    sendHikersToDriver: function() {
 		    console.log("hikers to driver")
         this.perform("send_hikers_to_driver")
+      },
+      contactHiker: function(facebookId) {
+        console.log("contacting hiker with facebookid:" + facebookId)
+        this.perform("contact_hiker", {facebook_id: facebookId})
+      },
+      replyToDriver: function(facebookId, response) {
+        let answer = "no";
+        if (response) {
+          answer = "yes";
+        }
+        console.log("Responding '" + answer + "' to driver with facebookid:" + facebookId)
+        this.perform("reply_to_driver", {facebook_id: facebookId, response:response})
       }
     });
 
@@ -129,5 +157,13 @@ export class ActionCableService {
   getHikerlist(callback) {
 	console.log("getHikerlist");
     callback(this.hikerlist);
+  }
+
+  contactHiker(facebookId) {
+    this.app.messagesChannel.contactHiker(facebookId);
+  }
+
+  replyToDriver(facebookId, response) {
+    this.app.messagesChannel.replyToDriver(facebookId, response);
   }
 }

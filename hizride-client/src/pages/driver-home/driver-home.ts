@@ -218,6 +218,7 @@ showHikers(data) {
             text: 'Kyllä',
             handler: () => {
               console.log('"Kyllä" painettu');
+              this.actionCable.contactHiker(this.user.social.facebook.uid);
               //kutsutaan actioncable-metodia, joka kutsuu backendia, joka broadcastaa viestin hiker-clientille
             }
           }

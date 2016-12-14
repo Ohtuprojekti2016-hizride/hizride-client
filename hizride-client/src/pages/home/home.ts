@@ -14,8 +14,7 @@ export class HomePage {
     public constructor(public navCtrl: NavController,
                        public platform: Platform,
                        public user: User,
-                       public auth: Auth,
-                       public actionCable:ActionCableService) {
+                       public auth: Auth) {
       this.platform = platform;
 
 
@@ -23,7 +22,7 @@ export class HomePage {
       //if (this.auth.isAuthenticated()) {
     //this.navCtrl.push(ModeSelectPage);
     //}
-    
+
 
     public login() {
 
@@ -31,8 +30,6 @@ export class HomePage {
         this.platform.ready().then(() => {
             this.auth.login('facebook').then(() => {
             console.log(this.user.social.facebook.data.full_name);
-            this.actionCable.sendUid(this.user.social.facebook.uid);
-            this.actionCable.sendName(this.user.social.facebook.data.full_name);
             console.log(this.user.social.facebook.uid);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
@@ -42,8 +39,6 @@ export class HomePage {
     }
 
   public skipLogin(){
-    this.actionCable.sendMessage("Skipped login, sending message");
-    this.actionCable.sendUid("kirjautumaton");
     this.navCtrl.push(ModeSelectPage);
   }
 
