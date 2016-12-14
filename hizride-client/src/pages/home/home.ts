@@ -9,31 +9,25 @@ import {ActionCableService} from "../../providers/action-cable";
     templateUrl: 'home.html',
 })
 export class HomePage {
-
-
     public constructor(public navCtrl: NavController,
                        public platform: Platform,
                        public user: User,
                        public auth: Auth) {
       this.platform = platform;
-
-
     }
-      //if (this.auth.isAuthenticated()) {
+
+    //if (this.auth.isAuthenticated()) {
     //this.navCtrl.push(ModeSelectPage);
     //}
 
-
     public login() {
-
-
         this.platform.ready().then(() => {
             this.auth.login('facebook').then(() => {
             console.log(this.user.social.facebook.data.full_name);
             console.log(this.user.social.facebook.uid);
             this.navCtrl.push(ModeSelectPage);
             }, (error) => {
-            console.log("error: " + error );
+              console.log("error: " + error );
             });
         });
     }
@@ -41,6 +35,4 @@ export class HomePage {
   public skipLogin(){
     this.navCtrl.push(ModeSelectPage);
   }
-
-
 }

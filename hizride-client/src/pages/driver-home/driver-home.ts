@@ -37,9 +37,10 @@ export class DriverHomePage {
 	}
 
 	loadMap() {
+    //Viite itseensä
     var self = this;
 
-
+    //varmistaa, että alusta on valmis ennen googlen toiminnallisuuksien käyttämistä. Edellytetään kartan toimintaan.
 		this.platform.ready().then(() => {
 			self.actionCable.sendHikers();
 
@@ -48,6 +49,7 @@ export class DriverHomePage {
 
 			Geolocation.getCurrentPosition({timeout: 30000, enableHighAccuracy: false}).then((position) => {
 
+			  //Käyttäjän nykyinen sijainti
 				let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         // current location lähetetään backendiin
@@ -79,10 +81,9 @@ export class DriverHomePage {
 				// we need to save a reference to this as we lose it in the callbacks
 				let self = this;
 
-				// add the first listener
-				// TODO
 
-				// add the second listener
+
+				// Automaattisen tekstinsyötön kuuntelija.
 				google.maps.event.addListener(autocomplete, 'place_changed', function() {
 					let place = autocomplete.getPlace();
 					let geometry = place.geometry;
@@ -90,8 +91,10 @@ export class DriverHomePage {
 
 					var bounds = new google.maps.LatLngBounds();
 
-            let markersArray = [];
-					if ((geometry) !== undefined) {
+          //Karttaan sijoitettavat markerit tallenetaan tähän
+          let markersArray = [];
+          //Jos automaattisen tekstinsyötön laittama paikka on olemassa
+          if ((geometry) !== undefined) {
 
 						console.log(place.name);
 						console.log(geometry.location.lng());
@@ -106,67 +109,71 @@ export class DriverHomePage {
 						};
 
 
-
+            //Tyhjentää kartan vanhat markerit
             self.clearOverlays(markersArray);
-						/*if (place.geometry.viewport) {
-						bounds.union(place.geometry.viewport);
-						} else {
-						bounds.extend(place.geometry.location);
-						}
-						*/
 
+            //Directions Servicelle lähetettävä reittipyyntö. Omasta sijainnista haettavaan paikkaan autolla.
 						var request = {
 							origin: latLng,
 							destination: place.geometry.location,
 							travelMode: 'DRIVING'
 						};
-
+            //Reittipyyntö
 						directionsService.route(request, function(result, status) {
 							if (status == 'OK') {
+							  //Piirretään reitti kartalle
 								directionsDisplay.setDirections(result);
+                //Tehdään reitistä backendiin lähetettävä polyline-muoto.
 								let polyline = result.routes["0"].overview_polyline;
 								let newPolyline = new google.maps.Polyline({
 									path:google.maps.geometry.encoding.decodePath(polyline)
 								});
-                self.actionCable.sendRoute(polyline);
+              //Lähetetään reitti backendiin.
+              self.actionCable.sendRoute(polyline);
 
-                self.actionCable.getHikerlist(function(hikerlist){
-                  console.log(hikerlist);
-				  var obj = JSON.parse(hikerlist);
+              //Haetaan nykyiset liftarit
+              self.actionCable.getHikerlist(function(hikerlist){
+                console.log(hikerlist);
+				        var obj = JSON.parse(hikerlist);
 
-				  for (let i in obj) {
-					console.log(obj[i]);
+				        for (let i in obj) {
+					        console.log(obj[i]);
+                  //Parsetaan liftarin positio
+				          let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
+                  //Jos liftari on reitin varrella...
+				          if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0002)) {
+				            //..Otetaan ID ylös..
+				    	      var fb_id = obj[i].facebook_id;
+                    //.. Lisätään merkki sijainnista..
+                    self.addMarker(hikerPos,markersArray);
+                    let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
+                    //..ja kulkukohteesta kartalle
+                    self.addMarker(hikerDest,markersArray);
+                    //Kysytään haluaako ajaja ottaa kyytiin
+				    	      self.showConfirm(fb_id, obj[i].destination_name);
+					        }
+				        }
+              });
 
-				    let hikerPos = new google.maps.LatLng(obj[i].current_location_lat, obj[i].current_location_lng);
-				    if (google.maps.geometry.poly.isLocationOnEdge(hikerPos, newPolyline, 0.0002)) {
-				    	var fb_id = obj[i].facebook_id;
-              self.addMarker(hikerPos,markersArray);
-              let hikerDest = new google.maps.LatLng(obj[i].destination_lat, obj[i].destination_lng);
+						}
+					});
 
-              self.addMarker(hikerDest,markersArray);
-				    	self.showConfirm(fb_id, obj[i].destination_name);
-					}
-				  }
-                });
-
-							}
-						});
-
-						//self.map.fitBounds(bounds);
-					}
-				});
-
-			}, (err) => {
-				console.log(err);
+					//self.map.fitBounds(bounds);
+				}
 			});
+
+		}, (err) => {
+			console.log(err);
 		});
-	}
+	});
+}
 
 showHikers(data) {
   let hikers = data;
   console.log("hikers näkyy");
 }
-  clearOverlays(markersArray) {
+
+clearOverlays(markersArray) {
   for (var i = 0; i < markersArray.length; i++ ) {
     markersArray[i].setMap(null);
   }
@@ -180,6 +187,7 @@ showHikers(data) {
       position: pos,
       title: "HitchHiker!"
     });
+
     markersArray.push(marker);
 
     let content = "<h4>HitchHiker!</h4>";
@@ -228,7 +236,7 @@ showHikers(data) {
   }
 
   goBack() {
-  this.navCtrl.push(ModeSelectPage);
+    this.navCtrl.push(ModeSelectPage);
   }
 
 }
