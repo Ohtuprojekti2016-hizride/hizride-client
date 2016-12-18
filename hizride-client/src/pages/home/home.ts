@@ -17,11 +17,7 @@ export class HomePage {
       this.platform = platform;
     }
 
-    //if (this.auth.isAuthenticated()) {
-    //this.navCtrl.push(ModeSelectPage);
-    //}
-
-
+    //facebook kirjautuminen inAppBrowserilla
     public login() {
         this.platform.ready().then(() => {
             this.auth.login('facebook').then(() => {
@@ -36,6 +32,7 @@ export class HomePage {
         });
     }
 
+    //ohittaa facebook kirjautumisen
   public skipLogin(){
     this.actionCable.sendMessage("Skipped login, sending message");
     this.actionCable.sendUid("kirjautumaton");
